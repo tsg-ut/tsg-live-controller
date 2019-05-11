@@ -8,11 +8,19 @@ require('core-js/stage/3');
 require('core-js/stage/2');
 require('core-js/stage/1');
 
+const wait = (time) => (
+	new Promise((resolve) => {
+		setTimeout(resolve, time);
+	})
+);
+
 module.exports = class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			mics: [],
+			volume: 0.5,
+			playing: true,
 		};
 
 		this.initialize();
@@ -39,12 +47,40 @@ module.exports = class App extends React.Component {
 		await obs.send('SetMute', {source: mic.name, mute: mic.enabled})
 	}
 
+	handleReadyStart = async () => {
+		let volume = this.state.volume;
+		while (volume < 1) {
+			volume = Math.min(volume + 0.05, 1);
+			await new Promise((resolve) => {
+				this.setState({volume}, resolve);
+			});
+			await wait(500);
+		}
+		await wait(5000);
+		while (volume > 0.5) {
+			volume = Math.max(volume - 0.05, 0);
+			await new Promise((resolve) => {
+				this.setState({volume}, resolve);
+			});
+			await wait(500);
+		}
+		while (volume > 0) {
+			volume = Math.max(volume - 0.03, 0);
+			await new Promise((resolve) => {
+				this.setState({volume}, resolve);
+			});
+			await wait(500);
+		}
+		this.setState({playing: false});
+	}
+
 	render() {
 		return (
 			<div className="app">
 				<ReactPlayer
 					url="/waiting.mp3"
-					playing
+					volume={this.state.volume}
+					playing={this.state.playing}
 					controls
 					loop
 				/>
@@ -59,6 +95,8 @@ module.exports = class App extends React.Component {
 						/>
 					</label>
 				))}
+				<br/>
+				<button type="button" onClick={this.handleReadyStart}>開始準備</button>
 			</div>
 		);
 	}
