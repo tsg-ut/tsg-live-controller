@@ -1,0 +1,39 @@
+button {
+	width: 100px;
+	height: 100px;
+	background: #EEE;
+	border-radius: 3px;
+	outline: none;
+	border: 1px solid #888;
+	cursor: pointer;
+}
+
+.options {
+	display: flex;
+	flex-direction: column;
+
+	label {
+		color: grey;
+
+		&.acitve {
+			color: red;
+		}
+	}
+}
+
+.controls {
+	display: flex;
+}
+
+.buttons {
+	display: flex;
+
+	button {
+		margin: 10px;
+		font-size: 1.5rem;
+
+		&.active {
+			background: yellow;
+		}
+	}
+}
