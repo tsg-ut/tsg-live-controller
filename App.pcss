@@ -8,6 +8,14 @@ button {
 	cursor: pointer;
 }
 
+input[type=time] {
+	font-size: 1.5rem;
+}
+
+.current-music {
+	height: 2rem;
+}
+
 .options {
 	display: flex;
 	flex-direction: column;
@@ -15,7 +23,7 @@ button {
 	label {
 		color: grey;
 
-		&.acitve {
+		&.active {
 			color: red;
 		}
 	}
@@ -23,6 +31,10 @@ button {
 
 .controls {
 	display: flex;
+
+	& > * {
+		margin-right: 10px;
+	}
 }
 
 .buttons {
@@ -36,4 +48,9 @@ button {
 			background: yellow;
 		}
 	}
+}
+
+.time {
+	font-size: 3rem;
+	font-weight: bold;
 }

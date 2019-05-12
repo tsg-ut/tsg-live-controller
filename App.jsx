@@ -19,6 +19,7 @@ const wait = (time) => (
 module.exports = class App extends React.Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			mics: [],
 			scenes: [],
@@ -26,9 +27,15 @@ module.exports = class App extends React.Component {
 			volume: 0.5,
 			playing: true,
 			phase: 'wait',
+			music: 'waiting.mp3',
+			time: 0,
 		};
 
 		this.initialize();
+
+		setInterval(() => {
+			this.updateTime();
+		}, 300);
 	}
 
 	async initialize() {
@@ -38,6 +45,16 @@ module.exports = class App extends React.Component {
 			this.handleUpdateScenes(),
 		]);
 	}
+
+	updateTime = () => {
+		this.setState({
+			time: Date.now(),
+		});
+	}
+
+	getTime = () => (
+		new Date(this.state.time).toLocaleTimeString('ja-JP', {timeZone: 'Asia/Tokyo'}).padStart(8, '0')
+	)
 
 	handleUpdateSources = async () => {
 		const data = await obs.send('GetSpecialSources');
@@ -52,7 +69,7 @@ module.exports = class App extends React.Component {
 		const data = await obs.send('GetSceneList');
 		this.setState({
 			scenes: data.scenes,
-			nextScene: data.nextScene,
+			nextScene: data.currentScene,
 		});
 	}
 
@@ -68,8 +85,8 @@ module.exports = class App extends React.Component {
 	}
 
 	handleReadyStart = async () => {
-		await new promise((resolve) => {
-			this.setstate({phase: 'ready'}, resolve);
+		await new Promise((resolve) => {
+			this.setState({phase: 'ready'}, resolve);
 		});
 		let volume = this.state.volume;
 		while (volume < 1) {
@@ -101,17 +118,32 @@ module.exports = class App extends React.Component {
 	}
 
 	handleStartLive = async () => {
+		await obs.send('SetCurrentScene', {
+			'scene-name': this.state.nextScene,
+		});
 		await new Promise((resolve) => {
-			this.setState({phase: 'ready'}, resolve);
+			this.setState({
+				phase: 'live',
+				music: 'live.mp3',
+				playing: true,
+				volume: 0.5,
+			}, resolve);
+		});
+	}
+
+	handleChangeNextScene = (event) => {
+		this.setState({
+			nextScene: event.target.value,
 		});
 	}
 
 	render() {
 		return (
 			<div className="app">
+				<div className="current-music">再生中: {this.state.music}</div>
 				<div style={{height: '50px', position: 'relative'}}>
 					<ReactPlayer
-						url="/waiting.mp3"
+						url={`/${this.state.music}`}
 						style={{position: 'absolute', bottom: '0'}}
 						volume={this.state.volume}
 						playing={this.state.playing}
@@ -122,7 +154,7 @@ module.exports = class App extends React.Component {
 				<div className="controls">
 					<div className="options">
 						{this.state.mics.map((mic) => (
-							<label className={(mic.enabled && this.state.phase === 'live') && 'active'} key={mic.type}>
+							<label className={(mic.enabled && this.state.phase === 'live') ? 'active' : ''} key={mic.type}>
 								{mic.name}
 								<input
 									name="isGoing"
@@ -134,19 +166,46 @@ module.exports = class App extends React.Component {
 						))}
 					</div>
 					<div>
-					次のシーン
-					<br/>
-					<select>
-						{this.state.scenes.map((scene) => (
-							<option
-								key={scene.name}
-								value={scene.name}
-								selected={scene.name === this.state.nextScene}
-							>
-								{scene.name}
-							</option>
-						))}
-					</select>
+						次のシーン
+						<br/>
+						<select
+							value={this.state.nextScene}
+							onChange={this.handleChangeNextScene}
+						>
+							{this.state.scenes.map((scene) => (
+								<option
+									key={scene.name}
+									value={scene.name}
+								>
+									{scene.name}
+								</option>
+							))}
+						</select>
+					</div>
+					<div>
+						ライブ開始時刻
+						<br/>
+						<input
+							type="time"
+							value={this.state.nextLiveText}
+							onChange={this.handleChangeNextLiveText}
+						/>
+						<br/>
+						<label>
+							<input
+								type="checkbox"
+							/>
+							自動モード
+						</label>
+					</div>
+					<div>
+						カウントダウン開始時刻
+						<br/>
+						<input
+							type="time"
+							value={this.state.nextLiveText}
+							onChange={this.handleChangeNextLiveText}
+						/>
 					</div>
 				</div>
 				<div className="buttons">
@@ -160,10 +219,13 @@ module.exports = class App extends React.Component {
 					<button
 						type="button"
 						onClick={this.handleStartLive}
-						className={this.state.phase === 'start' ? 'active' : ''}
+						className={this.state.phase === 'live' ? 'active' : ''}
 					>
 						ライブ<br/>開始
 					</button>
+				</div>
+				<div className="time">
+					{this.getTime()}
 				</div>
 			</div>
 		);
