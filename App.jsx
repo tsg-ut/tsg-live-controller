@@ -24,11 +24,15 @@ module.exports = class App extends React.Component {
 			mics: [],
 			scenes: [],
 			nextScene: null,
+			endScene: null,
 			volume: 0.5,
 			playing: true,
+			isAutoMode: false,
 			phase: 'wait',
 			music: 'waiting.mp3',
 			time: 0,
+			nextLive: '',
+			nextCount: '',
 		};
 
 		this.initialize();
@@ -70,6 +74,7 @@ module.exports = class App extends React.Component {
 		this.setState({
 			scenes: data.scenes,
 			nextScene: data.currentScene,
+			endScene: data.currentScene,
 		});
 	}
 
@@ -137,6 +142,30 @@ module.exports = class App extends React.Component {
 		});
 	}
 
+	handleChangeEndScene = (event) => {
+		this.setState({
+			endScene: event.target.value,
+		});
+	}
+
+	handleChangeAutoMode = (event) => {
+		this.setState(({isAutoMode}) => ({
+			isAutoMode: !isAutoMode,
+		}));
+	}
+
+	handleChangeNextLive = (event) => {
+		this.setState({
+			nextLive: event.target.value,
+		});
+	}
+
+	handleChangeNextCount = (event) => {
+		this.setState({
+			nextCount: event.target.value,
+		});
+	}
+
 	render() {
 		return (
 			<div className="app">
@@ -166,11 +195,27 @@ module.exports = class App extends React.Component {
 						))}
 					</div>
 					<div>
-						次のシーン
+						ライブ中シーン
 						<br/>
 						<select
 							value={this.state.nextScene}
 							onChange={this.handleChangeNextScene}
+						>
+							{this.state.scenes.map((scene) => (
+								<option
+									key={scene.name}
+									value={scene.name}
+								>
+									{scene.name}
+								</option>
+							))}
+						</select>
+						<br/>
+						ライブ終了シーン
+						<br/>
+						<select
+							value={this.state.endScene}
+							onChange={this.handleChangeEndScene}
 						>
 							{this.state.scenes.map((scene) => (
 								<option
@@ -187,24 +232,28 @@ module.exports = class App extends React.Component {
 						<br/>
 						<input
 							type="time"
-							value={this.state.nextLiveText}
-							onChange={this.handleChangeNextLiveText}
+							value={this.state.nextLive}
+							onChange={this.handleChangeNextLive}
+							disabled={this.state.isAutoMode}
 						/>
 						<br/>
 						<label>
 							<input
 								type="checkbox"
+								checked={this.state.isAutoMode}
+								onChange={this.handleChangeAutoMode}
 							/>
 							自動モード
 						</label>
 					</div>
 					<div>
-						カウントダウン開始時刻
+						カウント開始時刻
 						<br/>
 						<input
 							type="time"
-							value={this.state.nextLiveText}
-							onChange={this.handleChangeNextLiveText}
+							value={this.state.nextCount}
+							onChange={this.handleChangeNextCount}
+							disabled={this.state.isAutoMode}
 						/>
 					</div>
 				</div>
@@ -222,6 +271,20 @@ module.exports = class App extends React.Component {
 						className={this.state.phase === 'live' ? 'active' : ''}
 					>
 						ライブ<br/>開始
+					</button>
+					<button
+						type="button"
+						onClick={this.handleStartLive}
+						className={this.state.phase === 'count' ? 'active' : ''}
+					>
+						カウント<br/>開始
+					</button>
+					<button
+						type="button"
+						onClick={this.handleStartLive}
+						className={this.state.phase === 'wait' ? 'active' : ''}
+					>
+						ライブ<br/>終了
 					</button>
 				</div>
 				<div className="time">
