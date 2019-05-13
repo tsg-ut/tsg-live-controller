@@ -3,6 +3,17 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const dotenv = require('dotenv');
+const socketIo = require('socket.io');
+
+const io = socketIo();
+
+io.on('connection', (socket) => {
+	console.log('Socket connected');
+
+	socket.on('disconnect', () => {
+		console.log('Socket disconnected');
+	});
+});
 
 dotenv.config();
 
@@ -27,5 +38,7 @@ const server = app.listen(app.get('port'), () => {
 		app.get('env')
 	);
 });
+
+io.attach(server);
 
 module.exports = app;

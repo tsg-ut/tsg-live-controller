@@ -16,6 +16,11 @@ const wait = (time) => (
 	})
 );
 
+const socket = global.io();
+socket.on('connect', () => {
+	console.log('websocket connected');
+});
+
 module.exports = class App extends React.Component {
 	constructor(props) {
 		super(props);
@@ -130,6 +135,24 @@ module.exports = class App extends React.Component {
 			this.setState({
 				phase: 'live',
 				music: 'live.mp3',
+				playing: true,
+				volume: 0.5,
+			}, resolve);
+		});
+	}
+
+	handleStartCount = async () => {
+		socket.emit('startCount');
+	}
+
+	handleEndLive = async () => {
+		await obs.send('SetCurrentScene', {
+			'scene-name': this.state.endScene,
+		});
+		await new Promise((resolve) => {
+			this.setState({
+				phase: 'wait',
+				music: 'waiting.mp3',
 				playing: true,
 				volume: 0.5,
 			}, resolve);
@@ -274,14 +297,14 @@ module.exports = class App extends React.Component {
 					</button>
 					<button
 						type="button"
-						onClick={this.handleStartLive}
+						onClick={this.handleStartCount}
 						className={this.state.phase === 'count' ? 'active' : ''}
 					>
 						カウント<br/>開始
 					</button>
 					<button
 						type="button"
-						onClick={this.handleStartLive}
+						onClick={this.handleEndLive}
 						className={this.state.phase === 'wait' ? 'active' : ''}
 					>
 						ライブ<br/>終了
