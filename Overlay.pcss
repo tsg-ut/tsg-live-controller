@@ -1,0 +1,41 @@
+html, body, .app {
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	position: relative;
+	background: transparent;
+	margin: 0;
+}
+
+.notification {
+	position: absolute;
+	left: -600px;
+	bottom: 0;
+
+	background: #F44336;
+	height: 40px;
+	font-weight: bold;
+	font-size: 25px;
+	color: white;
+	line-height: 40px;
+	padding-left: 0.5em;
+
+	transition: transform 0.5s;
+
+	animation: appear 1s cubic-bezier(0.19, 1, 0.22, 1) both;
+
+	&::after {
+		content: '';
+		position: absolute;
+		width: 0;
+		height: 0;
+		left: 100%;
+		bottom: 0;
+		border-bottom: 40px solid #F44336;
+		border-right: 15px solid transparent;
+	}
+}
+
+@keyframes appear {
+	to { left: 0; }
+}

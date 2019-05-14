@@ -1,11 +1,14 @@
 const precss = require('precss');
 
 module.exports = {
-	entry: './index.babel.js',
+	entry: {
+		index: './index.babel.js',
+		overlay: './overlay.babel.js',
+	},
 	mode: 'development',
 	output: {
 		path: __dirname,
-		filename: 'index.js',
+		filename: '[name].js',
 	},
 	devtool: 'cheap-module-eval-source-map',
 	module: {
