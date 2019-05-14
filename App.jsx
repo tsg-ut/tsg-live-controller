@@ -1,5 +1,7 @@
 const React = require('react');
 const ReactPlayer = require('react-player').default;
+const {Howl} = require('howler');
+const mapValues = require('lodash/mapValues');
 const obs = new global.OBSWebSocket();
 
 require('@babel/polyfill');
@@ -9,6 +11,8 @@ require('core-js/stage/2');
 require('core-js/stage/1');
 
 require('./App.pcss');
+
+const PREROLL = 3000;
 
 const wait = (time) => (
 	new Promise((resolve) => {
@@ -20,6 +24,15 @@ const socket = global.io();
 socket.on('connect', () => {
 	console.log('websocket connected');
 });
+
+const sounds = mapValues({
+	countdown: 'countdown.mp3',
+}, (file) => (
+	new Howl({
+		src: [file],
+		volume: 0.6,
+	})
+));
 
 module.exports = class App extends React.Component {
 	constructor(props) {
@@ -33,6 +46,7 @@ module.exports = class App extends React.Component {
 			volume: 0.5,
 			playing: true,
 			isAutoMode: false,
+			loop: true,
 			phase: 'wait',
 			music: 'waiting.mp3',
 			time: 0,
@@ -63,6 +77,10 @@ module.exports = class App extends React.Component {
 
 	getTime = () => (
 		new Date(this.state.time).toLocaleTimeString('ja-JP', {timeZone: 'Asia/Tokyo'}).padStart(8, '0')
+	)
+
+	getIsLive = () => (
+		this.state.phase === 'live'|| this.state.phase === 'count'
 	)
 
 	handleUpdateSources = async () => {
@@ -134,15 +152,35 @@ module.exports = class App extends React.Component {
 		await new Promise((resolve) => {
 			this.setState({
 				phase: 'live',
-				music: 'live.mp3',
+				music: 'before-count.mp3',
+				loop: false,
 				playing: true,
-				volume: 0.5,
+				volume: 0.6,
 			}, resolve);
 		});
 	}
 
 	handleStartCount = async () => {
-		socket.emit('startCount');
+		sounds.countdown.play();
+		setTimeout(() => {
+			socket.emit('startCount');
+		}, PREROLL);
+		await new Promise((resolve) => {
+			const handler = () => {
+				resolve();
+				sounds.countdown.off('end', handler);
+			};
+			sounds.countdown.on('end', handler);
+		});
+		await new Promise((resolve) => {
+			this.setState({
+				phase: 'count',
+				music: 'count.mp3',
+				loop: true,
+				playing: true,
+				volume: 0.3,
+			}, resolve);
+		});
 	}
 
 	handleEndLive = async () => {
@@ -153,6 +191,7 @@ module.exports = class App extends React.Component {
 			this.setState({
 				phase: 'wait',
 				music: 'waiting.mp3',
+				loop: true,
 				playing: true,
 				volume: 0.5,
 			}, resolve);
@@ -200,13 +239,13 @@ module.exports = class App extends React.Component {
 						volume={this.state.volume}
 						playing={this.state.playing}
 						controls
-						loop
+						loop={this.state.loop}
 					/>
 				</div>
 				<div className="controls">
 					<div className="options">
 						{this.state.mics.map((mic) => (
-							<label className={(mic.enabled && this.state.phase === 'live') ? 'active' : ''} key={mic.type}>
+							<label className={(mic.enabled && this.getIsLive()) ? 'active' : ''} key={mic.type}>
 								{mic.name}
 								<input
 									name="isGoing"
