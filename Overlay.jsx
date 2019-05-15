@@ -41,15 +41,21 @@ module.exports = class App extends React.Component {
 			notifications: [
 				{
 					id: 1,
+					color: 'red',
 					text: '本郷チームが言語「ほげ」を獲得！',
+					info: '100',
 				},
 				{
 					id: 2,
+					color: 'blue',
 					text: '本郷チームが言語「ほげ」を獲得！',
+					info: '100',
 				},
 				{
 					id: 3,
+					color: 'red',
 					text: '本郷チームが言語「ほげ」を獲得！',
+					info: '100',
 				},
 			],
 		};
@@ -74,7 +80,9 @@ module.exports = class App extends React.Component {
 				this.setState(({notifications}) => ({
 					notifications: notifications.concat({
 						id: Math.random(),
+						color: Math.random() > .5 ? 'red' : 'blue',
 						text: '本郷チームが言語「ふが」を獲得！',
+						info: '100 → 89',
 					}),
 				}), resolve);
 			});
@@ -87,10 +95,15 @@ module.exports = class App extends React.Component {
 				{this.state.notifications.map((notification, index) => (
 					<div
 						key={notification.id}
-						className="notification red"
+						className={`notification ${notification.color}`}
 						style={{transform: `translateY(${-10 - 50 * index}px)`}}
 					>
-						{notification.text}
+						<div className="body">
+							{notification.text}
+						</div>
+						<div className="info">
+							{notification.info}
+						</div>
 					</div>
 				))}
 			</div>

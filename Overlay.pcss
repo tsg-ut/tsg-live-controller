@@ -4,6 +4,7 @@ html, body, .app {
 	overflow: hidden;
 	position: relative;
 	background: transparent;
+	font-family: 'Noto Sans CJK JP';
 	margin: 0;
 }
 
@@ -12,27 +13,69 @@ html, body, .app {
 	left: -600px;
 	bottom: 0;
 
-	background: #F44336;
+	display: flex;
+
+	background: blue;
 	height: 40px;
 	font-weight: bold;
 	font-size: 25px;
 	color: white;
 	line-height: 40px;
-	padding-left: 0.5em;
 
 	transition: transform 0.5s;
 
 	animation: appear 1s cubic-bezier(0.19, 1, 0.22, 1) both;
 
-	&::after {
-		content: '';
-		position: absolute;
-		width: 0;
-		height: 0;
-		left: 100%;
-		bottom: 0;
-		border-bottom: 40px solid #F44336;
-		border-right: 15px solid transparent;
+	.body, .info {
+		position: relative;
+		padding-left: 1rem;
+
+		&::after {
+			content: '';
+			position: absolute;
+			width: 0;
+			height: 0;
+			left: 100%;
+			bottom: 0;
+			border-bottom: 40px solid #F44336;
+			border-right: 10px solid transparent;
+			z-index: 1;
+		}
+	}
+
+	.info {
+		padding-right: 0.3rem;
+		font-size: 1.3rem;
+	}
+
+	&.red {
+		.body {
+			background-color: #F44336;
+			&::after {
+				border-bottom-color: #F44336;
+			}
+		}
+		.info {
+			background-color: #C62828;
+			&::after {
+				border-bottom-color: #C62828;
+			}
+		}
+	}
+
+	&.blue {
+		.body {
+			background-color: #3F51B5;
+			&::after {
+				border-bottom-color: #3F51B5;
+			}
+		}
+		.info {
+			background-color: #283593;
+			&::after {
+				border-bottom-color: #283593;
+			}
+		}
 	}
 }
 
