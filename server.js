@@ -5,6 +5,8 @@ const webpackHotMiddleware = require('webpack-hot-middleware');
 const dotenv = require('dotenv');
 const socketIo = require('socket.io');
 
+const esolang = require('./esolang.js');
+
 const io = socketIo();
 
 io.on('connection', (socket) => {
@@ -40,5 +42,7 @@ const server = app.listen(app.get('port'), () => {
 });
 
 io.attach(server);
+
+esolang(io);
 
 module.exports = app;

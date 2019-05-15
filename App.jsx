@@ -27,6 +27,7 @@ socket.on('connect', () => {
 
 const sounds = mapValues({
 	countdown: 'countdown.mp3',
+	notify: 'notify.mp3',
 }, (file) => (
 	new Howl({
 		src: [file],
@@ -67,6 +68,10 @@ module.exports = class App extends React.Component {
 			this.handleUpdateSources(),
 			this.handleUpdateScenes(),
 		]);
+
+		socket.on('update', () => {
+			sounds.notify.play();
+		});
 	}
 
 	updateTime = () => {

@@ -38,55 +38,46 @@ module.exports = class App extends React.Component {
 		super(props);
 
 		this.state = {
-			notifications: [
-				{
-					id: 1,
-					color: 'red',
-					text: '本郷チームが言語「ほげ」を獲得！',
-					info: '100',
-				},
-				{
-					id: 2,
-					color: 'blue',
-					text: '本郷チームが言語「ほげ」を獲得！',
-					info: '100',
-				},
-				{
-					id: 3,
-					color: 'red',
-					text: '本郷チームが言語「ほげ」を獲得！',
-					info: '100',
-				},
-			],
+			notifications: [],
 		};
 
 		this.initialize();
 	}
 
 	async initialize() {
-		while (this.state.notifications.length > 0) {
-			await new Promise((resolve) => {
-				setTimeout(resolve, 2000);
-			});
-			await new Promise((resolve) => {
-				this.setState(({notifications}) => ({
-					notifications: notifications.filter((n, index) => index !== 0),
-				}), resolve);
-			});
-			await new Promise((resolve) => {
-				setTimeout(resolve, 2000);
-			});
+		socket.on('update', async (data) => {
+			const id = Math.random().toString();
+			const team = data.to === 'red' ? '本郷' : '駒場';
+			const info = data.fromBytes === null ? data.toBytes.toString() : `${data.fromBytes} → ${data.toBytes}`;
+			const action = (() => {
+				if (data.from === null) {
+					return '獲得';
+				}
+				if (data.from === data.to) {
+					return '短縮';
+				}
+				return '奪取';
+			})();
+
 			await new Promise((resolve) => {
 				this.setState(({notifications}) => ({
 					notifications: notifications.concat({
-						id: Math.random(),
-						color: Math.random() > .5 ? 'red' : 'blue',
-						text: '本郷チームが言語「ふが」を獲得！',
-						info: '100 → 89',
+						id,
+						color: data.to,
+						text: `${team}チームが【 ${data.language} 】を${action}！`,
+						info,
 					}),
 				}), resolve);
 			});
-		}
+			await new Promise((resolve) => {
+				setTimeout(resolve, 15 * 1000);
+			});
+			await new Promise((resolve) => {
+				this.setState(({notifications}) => ({
+					notifications: notifications.filter((notification) => notification.id !== id),
+				}), resolve);
+			});
+		});
 	}
 
 	render() {
