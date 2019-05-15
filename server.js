@@ -1,8 +1,9 @@
+require('dotenv').config();
+
 const express = require('express');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
-const dotenv = require('dotenv');
 const socketIo = require('socket.io');
 
 const esolang = require('./esolang.js');
@@ -16,9 +17,12 @@ io.on('connection', (socket) => {
 	socket.on('disconnect', () => {
 		console.log('Socket disconnected');
 	});
-});
 
-dotenv.config();
+	socket.on('start-timer', () => {
+		console.log('start-timer');
+		io.emit('start-timer');
+	});
+});
 
 const app = express();
 

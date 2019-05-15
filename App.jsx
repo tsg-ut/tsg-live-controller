@@ -168,7 +168,7 @@ module.exports = class App extends React.Component {
 	handleStartCount = async () => {
 		sounds.countdown.play();
 		setTimeout(() => {
-			socket.emit('startCount');
+			socket.emit('start-timer');
 		}, PREROLL);
 		await new Promise((resolve) => {
 			const handler = () => {

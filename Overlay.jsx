@@ -39,49 +39,11 @@ module.exports = class App extends React.Component {
 
 		this.state = {
 			notifications: [],
-			chats: [
-				{
-					id: 'hoge',
-					text: 'これはテストです',
-				},
-				{
-					id: 'fuga',
-					text: 'これもテストメッセージです',
-				},
-				{
-					id: 'hoge1',
-					text: 'これはテストです',
-				},
-				{
-					id: 'fuga1',
-					text: 'これもテストメッセージです',
-				},
-				{
-					id: 'hoge2',
-					text: 'これはテストです',
-				},
-				{
-					id: 'fuga2',
-					text: 'これもテストメッセージです',
-				},
-				{
-					id: 'hoge3',
-					text: 'これはテストです',
-				},
-				{
-					id: 'fuga3',
-					text: 'これもテストメッセージです',
-				},
-				{
-					id: 'hoge4',
-					text: 'これはテストです',
-				},
-				{
-					id: 'fuga4',
-					text: 'これもテストメッセージです',
-				},
-			],
+			chats: [],
+			timer: 75 * 60 * 1000,
 		};
+
+		this.timerSatrt = null;
 
 		this.initialize();
 	}
@@ -110,6 +72,7 @@ module.exports = class App extends React.Component {
 							color: data.to,
 							text: `${team}チームが【 ${data.language} 】を${action}！`,
 							info,
+							isTransition: action === '奪取',
 						}),
 					}), resolve);
 				});
@@ -141,10 +104,26 @@ module.exports = class App extends React.Component {
 				this.chatsNode.scrollTop = this.chatsNode.scrollHeight;
 			}
 		});
+
+		socket.on('start-timer', () => {
+			this.timerStart = Date.now();
+			setInterval(() => {
+				this.setState({
+					timer: Math.max(0, 75 * 60 * 1000 - (Date.now() - this.timerStart)),
+				});
+			}, 1000 / 30);
+		});
 	}
 
 	handleRefChats = (node) => {
 		this.chatsNode = node;
+	}
+
+	getTimerText = () => {
+		const minutes = (Math.floor(this.state.timer / 60 / 1000)).toString().padStart(2, '0');
+		const seconds = (Math.floor(this.state.timer / 1000) % 60).toString().padStart(2, '0');
+		const milliseconds = (Math.floor(this.state.timer / 10) % 100).toString().padStart(2, '0');
+		return `${minutes}:${seconds}.${milliseconds}`;
 	}
 
 	render() {
@@ -154,8 +133,8 @@ module.exports = class App extends React.Component {
 					{this.state.notifications.map((notification, index) => (
 						<div
 							key={notification.id}
-							className={`notification ${notification.color}`}
-							style={{transform: `translateY(${-10 - 50 * index}px)`}}
+							className={`notification ${notification.color} ${notification.isTransition ? 'transition' : ''}`}
+							style={{transform: `translateY(${-20 - 90 * index}px)`}}
 						>
 							<div className="body">
 								{notification.text}
@@ -165,6 +144,12 @@ module.exports = class App extends React.Component {
 							</div>
 						</div>
 					))}
+				</div>
+				<div className="timer">
+					残り時間
+					<span className="time">
+						{this.getTimerText()}
+					</span>
 				</div>
 				<div className="chats" ref={this.handleRefChats}>
 					{this.state.chats.map((chat) => (

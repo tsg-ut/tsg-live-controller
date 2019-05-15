@@ -6,21 +6,22 @@ html, body, .app, .notifications {
 	background: transparent;
 	font-family: 'Noto Sans CJK JP';
 	margin: 0;
+	font-size: 30px;
 }
 
 .notification {
 	position: absolute;
-	left: -600px;
+	left: -1200px;
 	bottom: 0;
 
 	display: flex;
 
 	background: blue;
-	height: 40px;
+	height: 2.5rem;
 	font-weight: bold;
-	font-size: 25px;
+	font-size: 1.6rem;
 	color: white;
-	line-height: 40px;
+	line-height: 2.5rem;
 
 	transition: transform 0.5s;
 
@@ -37,8 +38,8 @@ html, body, .app, .notifications {
 			height: 0;
 			left: 100%;
 			bottom: 0;
-			border-bottom: 40px solid #F44336;
-			border-right: 10px solid transparent;
+			border-bottom: 2.5rem solid #F44336;
+			border-right: 0.5rem solid transparent;
 			z-index: 1;
 		}
 	}
@@ -61,6 +62,9 @@ html, body, .app, .notifications {
 				border-bottom-color: #C62828;
 			}
 		}
+		&.transition .info {
+			background: linear-gradient(78deg, #283593, #283593 55%, #C62828 55%, #C62828)
+		}
 	}
 
 	&.blue {
@@ -76,13 +80,42 @@ html, body, .app, .notifications {
 				border-bottom-color: #283593;
 			}
 		}
+		&.transition .info {
+			background: linear-gradient(78deg, #C62828, #C62828 55%, #283593 55%, #283593)
+		}
+	}
+}
+
+.timer {
+	background: linear-gradient(90deg, #153b7c, #271772);
+	width: 410px;
+	height: 90px;
+	color: white;
+	position: absolute;
+	bottom: 240px;
+	right: 20px;
+
+	border-radius: 9999px;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: 300;
+	font-weight: 0.8rem;
+
+	.time {
+		font-size: 2rem;
+		font-weight: bold;
+		margin-left: 0.3rem;
+		position: relative;
+		bottom: 3px;
 	}
 }
 
 .chats {
 	position: absolute;
-	width: 240px;
-	height: 120px;
+	width: 450px;
+	height: 225px;
 	background: white;
 	right: 0;
 	bottom: 0;
@@ -93,12 +126,46 @@ html, body, .app, .notifications {
 		line-height: 1.1rem;
 		padding: 0.2rem 0.4rem;
 
+		&:nth-child(odd) {
+			animation: flush-odd 7s linear both;
+		}
+
 		&:nth-child(even) {
-			background: #EEE;
+			animation: flush-even 7s linear both;
 		}
 	}
 }
 
 @keyframes appear {
 	to { left: 0; }
+}
+
+@keyframes flush-odd {
+	from {
+		background: #F44336;
+		color: white;
+	}
+	90% {
+		background: #F44336;
+		color: white;
+	}
+	to {
+		background: white;
+		color: #222;
+	}
+}
+
+@keyframes flush-even {
+	from {
+		background: #F44336;
+		color: white;
+	}
+	90% {
+		background: #F44336;
+		color: white;
+	}
+	to {
+		background: #EEE;
+		color: #222;
+	}
 }
