@@ -105,14 +105,20 @@ module.exports = class App extends React.Component {
 			}
 		});
 
-		socket.on('start-timer', () => {
-			this.timerStart = Date.now();
-			setInterval(() => {
-				this.setState({
-					timer: Math.max(0, 75 * 60 * 1000 - (Date.now() - this.timerStart)),
-				});
-			}, 1000 / 30);
+		socket.on('start-timer', (countEnd) => {
+			this.countEnd = countEnd;
+			this.interval = setInterval(this.handleTick, 1000 / 30);
 		});
+	}
+
+	handleTick = () => {
+		const timer = this.countEnd - Date.now();
+		this.setState({
+			timer: Math.max(0, timer),
+		});
+		if (timer <= 0) {
+			clearInterval(this.interval);
+		}
 	}
 
 	handleRefChats = (node) => {

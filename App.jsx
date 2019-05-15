@@ -26,12 +26,22 @@ socket.on('connect', () => {
 });
 
 const sounds = mapValues({
-	countdown: 'countdown.mp3',
-	notify: 'notify.mp3',
-}, (file) => (
+	countdown: {
+		file: 'countdown.mp3',
+		volume: 0.6,
+	},
+	notify: {
+		file: 'notify.mp3',
+		volume: 0.6,
+	},
+	gong: {
+		file: 'gong.mp3',
+		volume: 1,
+	},
+}, ({file, volume}) => (
 	new Howl({
 		src: [file],
-		volume: 0.6,
+		volume,
 	})
 ));
 
@@ -53,6 +63,7 @@ module.exports = class App extends React.Component {
 			time: 0,
 			nextLive: '',
 			nextCount: '',
+			countEnd: null,
 		};
 
 		this.initialize();
@@ -75,14 +86,27 @@ module.exports = class App extends React.Component {
 	}
 
 	updateTime = () => {
+		const prevTime = this.state.time;
+		const newTime = Date.now();
 		this.setState({
-			time: Date.now(),
+			time: newTime,
 		});
+
+		if (prevTime < this.state.countEnd && this.state.countEnd <= newTime) {
+			this.handleEndCount();
+		}
 	}
 
 	getTime = () => (
 		new Date(this.state.time).toLocaleTimeString('ja-JP', {timeZone: 'Asia/Tokyo'}).padStart(8, '0')
 	)
+
+	getCountDown = () => {
+		const countdown = Math.max(0, this.state.countEnd - this.state.time);
+		const minutes = (Math.floor(countdown / 60 / 1000)).toString().padStart(2, '0');
+		const seconds = (Math.floor(countdown / 1000) % 60).toString().padStart(2, '0');
+		return `${minutes}:${seconds}`;
+	};
 
 	getIsLive = () => (
 		this.state.phase === 'live'|| this.state.phase === 'count'
@@ -114,7 +138,6 @@ module.exports = class App extends React.Component {
 				enabled: mic.type === type ? !mic.enabled : mic.enabled,
 			})),
 		});
-		await obs.send('SetMute', {source: mic.name, mute: mic.enabled})
 	}
 
 	handleReadyStart = async () => {
@@ -151,24 +174,30 @@ module.exports = class App extends React.Component {
 	}
 
 	handleStartLive = async () => {
-		await obs.send('SetCurrentScene', {
+		this.setState({
+			phase: 'live',
+			music: 'before-count.mp3',
+			loop: false,
+			playing: true,
+			volume: 0.6,
+		});
+
+		obs.send('SetCurrentScene', {
 			'scene-name': this.state.nextScene,
 		});
-		await new Promise((resolve) => {
-			this.setState({
-				phase: 'live',
-				music: 'before-count.mp3',
-				loop: false,
-				playing: true,
-				volume: 0.6,
-			}, resolve);
-		});
+		for (const mic of this.state.mics) {
+			await obs.send('SetMute', {
+				source: mic.name,
+				mute: !mic.enabled,
+			});
+		}
 	}
 
 	handleStartCount = async () => {
 		sounds.countdown.play();
+		const countEnd = Date.now() + PREROLL + 0.5 * 60 * 1000;
 		setTimeout(() => {
-			socket.emit('start-timer');
+			socket.emit('start-timer', countEnd);
 		}, PREROLL);
 		await new Promise((resolve) => {
 			const handler = () => {
@@ -184,6 +213,32 @@ module.exports = class App extends React.Component {
 				loop: true,
 				playing: true,
 				volume: 0.3,
+				countEnd,
+			}, resolve);
+		});
+	}
+
+	handleEndCount = async () => {
+		await new Promise((resolve) => {
+			this.setState({
+				playing: false,
+			}, resolve);
+		});
+		sounds.gong.play();
+		await new Promise((resolve) => {
+			const handler = () => {
+				resolve();
+				sounds.gong.off('end', handler);
+			};
+			sounds.gong.on('end', handler);
+		});
+		await new Promise((resolve) => {
+			this.setState({
+				phase: 'countend',
+				music: 'countend.mp3',
+				loop: true,
+				playing: true,
+				volume: 0.5,
 			}, resolve);
 		});
 	}
@@ -192,6 +247,12 @@ module.exports = class App extends React.Component {
 		await obs.send('SetCurrentScene', {
 			'scene-name': this.state.endScene,
 		});
+		for (const mic of this.state.mics) {
+			await obs.send('SetMute', {
+				source: mic.name,
+				mute: true,
+			});
+		}
 		await new Promise((resolve) => {
 			this.setState({
 				phase: 'wait',
@@ -356,6 +417,9 @@ module.exports = class App extends React.Component {
 				</div>
 				<div className="time">
 					{this.getTime()}
+					<span className="countdown">
+						{this.state.countEnd ? this.getCountDown() : '--:--'}
+					</span>
 				</div>
 			</div>
 		);

@@ -18,9 +18,8 @@ io.on('connection', (socket) => {
 		console.log('Socket disconnected');
 	});
 
-	socket.on('start-timer', () => {
-		console.log('start-timer');
-		io.emit('start-timer');
+	socket.on('start-timer', (countEnd) => {
+		io.emit('start-timer', countEnd);
 	});
 });
 
