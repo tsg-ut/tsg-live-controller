@@ -31,7 +31,7 @@ module.exports = (io) => {
 			const previousLanguage = languageMap.get(language.slug);
 			if (previousLanguage.size !== size) {
 				io.emit('update', {
-					type: 'golf',
+					type: 'esolang',
 					language: name,
 					from: previousLanguage.team === null ? null : (previousLanguage.team === 0 ? 'red' : 'blue'),
 					fromBytes: previousLanguage.size,

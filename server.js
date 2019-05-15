@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const socketIo = require('socket.io');
 
 const esolang = require('./esolang.js');
+const youtube = require('./youtube.js');
 
 const io = socketIo();
 
@@ -44,5 +45,6 @@ const server = app.listen(app.get('port'), () => {
 io.attach(server);
 
 esolang(io);
+youtube(io);
 
 module.exports = app;

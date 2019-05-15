@@ -1,4 +1,4 @@
-html, body, .app {
+html, body, .app, .notifications {
 	width: 100vw;
 	height: 100vh;
 	overflow: hidden;
@@ -75,6 +75,26 @@ html, body, .app {
 			&::after {
 				border-bottom-color: #283593;
 			}
+		}
+	}
+}
+
+.chats {
+	position: absolute;
+	width: 240px;
+	height: 120px;
+	background: white;
+	right: 0;
+	bottom: 0;
+	overflow-y: hidden;
+
+	.chat {
+		font-size: 0.8rem;
+		line-height: 1.1rem;
+		padding: 0.2rem 0.4rem;
+
+		&:nth-child(even) {
+			background: #EEE;
 		}
 	}
 }
