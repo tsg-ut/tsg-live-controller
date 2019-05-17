@@ -70,7 +70,7 @@ module.exports = class App extends React.Component {
 
 		setInterval(() => {
 			this.updateTime();
-		}, 300);
+		}, 200);
 	}
 
 	async initialize() {
@@ -111,6 +111,38 @@ module.exports = class App extends React.Component {
 	getIsLive = () => (
 		this.state.phase === 'live'|| this.state.phase === 'count'
 	)
+
+	getNextLive = () => {
+		const [hour, minute] = this.state.nextLive.split(':').map((n) => parseInt(n));
+		if ([hour, minute].some((c) => typeof c !== 'number' || Number.isNaN(c))) {
+			return 0;
+		}
+
+		const now = new Date();
+		return new Date(
+			now.getFullYear(),
+			now.getMonth(),
+			now.getDate(),
+			hour,
+			minute,
+		).getTime();
+	}
+
+	getNextCount = () => {
+		const [hour, minute] = this.state.nextCount.split(':').map((n) => parseInt(n));
+		if ([hour, minute].some((c) => typeof c !== 'number' || Number.isNaN(c))) {
+			return 0;
+		}
+
+		const now = new Date();
+		return new Date(
+			now.getFullYear(),
+			now.getMonth(),
+			now.getDate(),
+			hour,
+			minute,
+		).getTime();
+	}
 
 	handleUpdateSources = async () => {
 		const data = await obs.send('GetSpecialSources');
