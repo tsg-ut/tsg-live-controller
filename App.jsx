@@ -64,6 +64,7 @@ module.exports = class App extends React.Component {
 			nextLive: '',
 			nextCount: '',
 			countEnd: null,
+			countTime: 0,
 		};
 
 		this.initialize();
@@ -94,6 +95,25 @@ module.exports = class App extends React.Component {
 
 		if (prevTime < this.state.countEnd && this.state.countEnd <= newTime) {
 			this.handleEndCount();
+		}
+
+		if (this.state.isAutoMode) {
+			const nextLive = this.getNextLive();
+			const nextCount = this.getNextCount();
+			const nextCountStart = nextCount === 0 ? 0 : nextCount - PREROLL;
+			const nextLiveReady = nextLive - 27 * 1000;
+
+			if (prevTime < nextLiveReady && nextLiveReady <= newTime) {
+				this.handleReadyStart();
+			}
+
+			if (prevTime < nextLive && nextLive <= newTime) {
+				this.handleStartLive({startCount: nextCountStart === 0});
+			}
+
+			if (prevTime < nextCount && nextCount <= newTime) {
+				this.handleStartCount();
+			}
 		}
 	}
 
@@ -184,7 +204,7 @@ module.exports = class App extends React.Component {
 			});
 			await wait(500);
 		}
-		await wait(5000);
+		await wait(7000);
 		while (volume > 0.5) {
 			volume = Math.max(volume - 0.05, 0);
 			await new Promise((resolve) => {
@@ -205,14 +225,27 @@ module.exports = class App extends React.Component {
 		});
 	}
 
-	handleStartLive = async () => {
-		this.setState({
-			phase: 'live',
-			music: 'before-count.mp3',
-			loop: false,
-			playing: true,
-			volume: 0.6,
-		});
+	handleStartLive = async ({startCount = false} = {}) => {
+		if (startCount) {
+			const countEnd = Date.now() + this.state.countTime * 60 * 1000;
+			socket.emit('start-timer', countEnd);
+			this.setState({
+				phase: 'count',
+				music: 'count.mp3',
+				loop: true,
+				playing: true,
+				volume: 0.3,
+				countEnd,
+			});
+		} else {
+			this.setState({
+				phase: 'live',
+				music: 'before-count.mp3',
+				loop: false,
+				playing: true,
+				volume: 0.6,
+			});
+		}
 
 		obs.send('SetCurrentScene', {
 			'scene-name': this.state.nextScene,
@@ -226,8 +259,11 @@ module.exports = class App extends React.Component {
 	}
 
 	handleStartCount = async () => {
+		if (this.state.countTime === 0) {
+			return;
+		}
 		sounds.countdown.play();
-		const countEnd = Date.now() + PREROLL + 75 * 60 * 1000;
+		const countEnd = Date.now() + PREROLL + this.state.countTime * 60 * 1000;
 		setTimeout(() => {
 			socket.emit('start-timer', countEnd);
 		}, PREROLL);
@@ -323,6 +359,12 @@ module.exports = class App extends React.Component {
 	handleChangeNextCount = (event) => {
 		this.setState({
 			nextCount: event.target.value,
+		});
+	}
+
+	handleChangeCountTime = (event) => {
+		this.setState({
+			countTime: parseInt(event.target.value),
 		});
 	}
 
@@ -432,13 +474,21 @@ module.exports = class App extends React.Component {
 					>
 						ライブ<br/>開始
 					</button>
-					<button
-						type="button"
-						onClick={this.handleStartCount}
-						className={this.state.phase === 'count' ? 'active' : ''}
-					>
-						カウント<br/>開始
-					</button>
+					<div className="button-wrap">
+						<button
+							type="button"
+							onClick={this.handleStartCount}
+							className={this.state.phase === 'count' ? 'active' : ''}
+						>
+							カウント<br/>開始
+						</button>
+						<input
+							className="count-time"
+							type="number"
+							value={this.state.countTime}
+							onChange={this.handleChangeCountTime}
+						/>
+					</div>
 					<button
 						type="button"
 						onClick={this.handleEndLive}

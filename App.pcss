@@ -40,13 +40,35 @@ input[type=time] {
 .buttons {
 	display: flex;
 
-	button {
+	& > * {
+		display: inline-block;
 		margin: 10px;
+	}
+
+	button {
 		font-size: 1.3rem;
+		box-sizing: border-box;
 
 		&.active {
 			background: yellow;
 		}
+	}
+
+	.button-wrap {
+		position: relative;
+	}
+
+	.button-wrap button {
+		padding-bottom: 2rem;
+	}
+
+	.count-time {
+		position: absolute;
+		top: 4.5rem;
+		width: 60%;
+		text-align: center;
+		box-sizing: border-box;
+		left: 20%;
 	}
 }
 
