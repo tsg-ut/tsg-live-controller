@@ -1,3 +1,4 @@
+const qs = require('querystring');
 const React = require('react');
 const ReactPlayer = require('react-player').default;
 const {Howl} = require('howler');
@@ -37,10 +38,13 @@ module.exports = class App extends React.Component {
 	constructor(props) {
 		super(props);
 
+		const params = qs.parse(location.search.slice(1));
+		const timer = parseInt(params.timer);
+
 		this.state = {
 			notifications: [],
 			chats: [],
-			timer: 75 * 60 * 1000,
+			timer: timer === 0 ? null : ((timer || 75) * 60 * 1000),
 		};
 
 		this.timerSatrt = null;
@@ -107,7 +111,7 @@ module.exports = class App extends React.Component {
 
 		socket.on('start-timer', (countEnd) => {
 			this.countEnd = countEnd;
-			this.interval = setInterval(this.handleTick, 1000 / 30);
+			this.interval = setInterval(this.handleTick, 1000 / 31);
 		});
 	}
 
@@ -151,12 +155,14 @@ module.exports = class App extends React.Component {
 						</div>
 					))}
 				</div>
-				<div className="timer">
-					残り時間
-					<span className="time">
-						{this.getTimerText()}
-					</span>
-				</div>
+				{this.state.timer !== null && (
+					<div className="timer">
+						残り時間
+						<span className="time">
+							{this.getTimerText()}
+						</span>
+					</div>
+				)}
 				<div className="chats" ref={this.handleRefChats}>
 					{this.state.chats.map((chat) => (
 						<div

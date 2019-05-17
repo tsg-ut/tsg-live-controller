@@ -195,7 +195,7 @@ module.exports = class App extends React.Component {
 
 	handleStartCount = async () => {
 		sounds.countdown.play();
-		const countEnd = Date.now() + PREROLL + 0.5 * 60 * 1000;
+		const countEnd = Date.now() + PREROLL + 75 * 60 * 1000;
 		setTimeout(() => {
 			socket.emit('start-timer', countEnd);
 		}, PREROLL);
