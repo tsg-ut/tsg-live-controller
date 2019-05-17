@@ -287,6 +287,9 @@ module.exports = class App extends React.Component {
 	}
 
 	handleEndCount = async () => {
+		if (this.state.isAutoMode && this.getNextCount() === 0) {
+			return;
+		}
 		await new Promise((resolve) => {
 			this.setState({
 				playing: false,
