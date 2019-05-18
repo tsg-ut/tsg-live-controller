@@ -1,8 +1,5 @@
 const qs = require('querystring');
 const React = require('react');
-const ReactPlayer = require('react-player').default;
-const {Howl} = require('howler');
-const mapValues = require('lodash/mapValues');
 
 require('@babel/polyfill');
 require('core-js/stage/4');
@@ -24,15 +21,6 @@ const socket = global.io();
 socket.on('connect', () => {
 	console.log('websocket connected');
 });
-
-const sounds = mapValues({
-	countdown: 'countdown.mp3',
-}, (file) => (
-	new Howl({
-		src: [file],
-		volume: 0.6,
-	})
-));
 
 module.exports = class App extends React.Component {
 	constructor(props) {
@@ -80,16 +68,44 @@ module.exports = class App extends React.Component {
 						}),
 					}), resolve);
 				});
+
+				await new Promise((resolve) => {
+					setTimeout(resolve, 15 * 1000);
+				});
+				await new Promise((resolve) => {
+					this.setState(({notifications}) => ({
+						notifications: notifications.filter((notification) => notification.id !== id),
+					}), resolve);
+				});
+
+				return;
 			}
 
-			await new Promise((resolve) => {
-				setTimeout(resolve, 15 * 1000);
-			});
-			await new Promise((resolve) => {
-				this.setState(({notifications}) => ({
-					notifications: notifications.filter((notification) => notification.id !== id),
-				}), resolve);
-			});
+			if (data.type === 'ctf') {
+				const team = data.team === 0 ? '本郷' : '駒場';
+
+				await new Promise((resolve) => {
+					this.setState(({notifications}) => ({
+						notifications: notifications.concat({
+							id,
+							color: data.team === 0 ? 'red' : 'blue',
+							text: `${team}チームが【 ${data.name} 】を解答！`,
+							info: `${data.value}pts`,
+							isTransition: false,
+						}),
+					}), resolve);
+				});
+
+				await new Promise((resolve) => {
+					setTimeout(resolve, 30 * 1000);
+				});
+
+				await new Promise((resolve) => {
+					this.setState(({notifications}) => ({
+						notifications: notifications.filter((notification) => notification.id !== id),
+					}), resolve);
+				});
+			}
 		});
 
 		socket.on('message', async (data) => {

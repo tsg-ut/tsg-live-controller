@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server",
+    "dev": "cross-env NODE_ENV=development node server.js",
+    "start": "cross-env NODE_ENV=production node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -35,6 +36,7 @@
     "classnames": "^2.2.6",
     "common-tags": "^1.8.0",
     "core-js": "^3.0.1",
+    "cross-env": "^5.2.0",
     "css-loader": "^2.1.1",
     "cssnano": "^4.1.10",
     "dotenv": "^8.0.0",

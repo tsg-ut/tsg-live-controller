@@ -7,6 +7,7 @@ const webpackHotMiddleware = require('webpack-hot-middleware');
 const socketIo = require('socket.io');
 
 const esolang = require('./esolang.js');
+const ctfd = require('./ctfd.js');
 const youtube = require('./youtube.js');
 
 const io = socketIo();
@@ -48,6 +49,7 @@ const server = app.listen(app.get('port'), () => {
 io.attach(server);
 
 esolang(io);
+ctfd(io);
 youtube(io);
 
 module.exports = app;
