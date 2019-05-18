@@ -34,6 +34,11 @@ module.exports = (io) => {
 				});
 			}
 		}
+
+		io.emit('ctf-heartbeat', {
+			type: 'ctf',
+			solves: solvesSets.map((set) => Array.from(set)),
+		});
 	};
 
 	updateSolves({init: true});
