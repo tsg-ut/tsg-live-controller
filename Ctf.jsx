@@ -40,13 +40,13 @@ module.exports = class App extends React.Component {
 			<div className="app">
 				{this.state.solves.map((teamSolves, index) => {
 					const chunks = [
-						[3, 6],
-						[2, 5],
-						[1, 4, 7],
+						[3],
+						[2, 5, 8],
+						[1, 4, 6, 7, 9],
 					];
 
 					const score = sumBy(teamSolves, (solve) => (
-						[200, 150, 100][chunks.findIndex((chunk) => chunk.includes(solve))]
+						[400, 300, 200][chunks.findIndex((chunk) => chunk.includes(solve))]
 					));
 
 					return (
