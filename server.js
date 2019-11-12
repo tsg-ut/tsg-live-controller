@@ -9,6 +9,7 @@ const socketIo = require('socket.io');
 const esolang = require('./esolang.js');
 const ctfd = require('./ctfd.js');
 const youtube = require('./youtube.js');
+const hackerrank = require('./hackerrank.js');
 
 const io = socketIo();
 
@@ -51,5 +52,6 @@ io.attach(server);
 esolang(io);
 ctfd(io);
 youtube(io);
+hackerrank(io);
 
 module.exports = app;
