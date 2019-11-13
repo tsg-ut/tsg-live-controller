@@ -84,6 +84,21 @@ html, body, .app, .notifications {
 			background: linear-gradient(78deg, #C62828, #C62828 55%, #283593 55%, #283593)
 		}
 	}
+
+	&.red, &.blue {
+		.info.green {
+			background-color: #5cb85c;
+			&::after {
+				border-bottom-color: #5cb85c;
+			}
+		}
+		.info.orange {
+			background-color: #f0ad4e;
+			&::after {
+				border-bottom-color: #f0ad4e;
+			}
+		}
+	}
 }
 
 .timer {

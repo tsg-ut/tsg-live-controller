@@ -16,7 +16,7 @@ module.exports = (io) => {
 			},
 		});
 
-		for (const submission of models) {
+		for (const submission of data.models) {
 			if (submission.status === 'Processing') {
 				continue;
 			}

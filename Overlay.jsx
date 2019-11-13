@@ -106,6 +106,43 @@ module.exports = class App extends React.Component {
 					}), resolve);
 				});
 			}
+
+			if (data.type === 'hackerrank') {
+				const team = data.team === 0 ? '本郷' : '駒場';
+				const statusMap = new Map([
+					['Accepted', 'AC'],
+					['Compilation error', 'CE'],
+					['Wrong Answer', 'WA'],
+					['Terminated due to timeout', 'TLE'],
+					['Runtime Error', 'RE'],
+					['Segmentation Fault', 'RE'],
+				]);
+				const status = statusMap.get(data.status) || data.status;
+
+				await new Promise((resolve) => {
+					this.setState(({notifications}) => ({
+						notifications: notifications.concat({
+							id,
+							color: data.team === 0 ? 'red' : 'blue',
+							text: `${team}チームが【 ${data.challenge} 】を提出！`,
+							info: status,
+							infoColor: status === 'AC' ? 'green' : 'orange',
+							isTransition: false,
+						}),
+					}), resolve);
+				});
+				
+
+				await new Promise((resolve) => {
+					setTimeout(resolve, 30 * 1000);
+				});
+
+				await new Promise((resolve) => {
+					this.setState(({notifications}) => ({
+						notifications: notifications.filter((notification) => notification.id !== id),
+					}), resolve);
+				});
+			}
 		});
 
 		socket.on('message', async (data) => {
@@ -165,7 +202,7 @@ module.exports = class App extends React.Component {
 							<div className="body">
 								{notification.text}
 							</div>
-							<div className="info">
+							<div className={`info ${notification.infoColor || ''}`}>
 								{notification.info}
 							</div>
 						</div>
