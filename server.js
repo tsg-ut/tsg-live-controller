@@ -10,6 +10,7 @@ const esolang = require('./esolang.js');
 const ctfd = require('./ctfd.js');
 const youtube = require('./youtube.js');
 const hackerrank = require('./hackerrank.js');
+const twitter = require('./twitter.js');
 
 const io = socketIo();
 
@@ -53,5 +54,6 @@ esolang(io);
 ctfd(io);
 youtube(io);
 hackerrank(io);
+twitter(io);
 
 module.exports = app;
