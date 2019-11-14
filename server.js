@@ -5,13 +5,21 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const socketIo = require('socket.io');
+const firebase = require('firebase-admin');
 
 const esolang = require('./esolang.js');
 const ctfd = require('./ctfd.js');
 const youtube = require('./youtube.js');
 const hackerrank = require('./hackerrank.js');
 const twitter = require('./twitter.js');
+const playerComment = require('./player-comment.js');
 
+firebase.initializeApp({
+	credential: firebase.credential.applicationDefault(),
+	databaseURL: process.env.FIREBASE_ENDPOINT,
+});
+
+const db = firebase.firestore();
 const io = socketIo();
 
 io.on('connection', (socket) => {
@@ -55,5 +63,6 @@ ctfd(io);
 youtube(io);
 hackerrank(io);
 twitter(io);
+playerComment(io, db);
 
 module.exports = app;

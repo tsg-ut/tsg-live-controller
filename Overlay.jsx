@@ -1,5 +1,6 @@
 const qs = require('querystring');
 const React = require('react');
+const classNames = require('classnames');
 
 require('@babel/polyfill');
 require('core-js/stage/4');
@@ -162,6 +163,33 @@ module.exports = class App extends React.Component {
 			}
 		});
 
+		socket.on('player-message', async (data) => {
+			const id = Math.random().toString();
+
+			await new Promise((resolve) => {
+				this.setState(({notifications}) => ({
+					notifications: notifications.concat({
+						id,
+						color: data.team === 0 ? 'red' : 'blue',
+						text: data.text,
+						user: data.user,
+						isPlayerMessage: true,
+					}),
+				}), resolve);
+			});
+			
+
+			await new Promise((resolve) => {
+				setTimeout(resolve, 20 * 1000);
+			});
+
+			await new Promise((resolve) => {
+				this.setState(({notifications}) => ({
+					notifications: notifications.filter((notification) => notification.id !== id),
+				}), resolve);
+			});
+		});
+
 		socket.on('start-timer', (countEnd) => {
 			this.countEnd = countEnd;
 			this.interval = setInterval(this.handleTick, 1000 / 31);
@@ -190,21 +218,34 @@ module.exports = class App extends React.Component {
 	}
 
 	render() {
+		let offset = 0;
+
 		return (
 			<div className="app">
 				<div className="notifications">
 					{this.state.notifications.map((notification, index) => (
 						<div
 							key={notification.id}
-							className={`notification ${notification.color} ${notification.isTransition ? 'transition' : ''}`}
+							className={classNames('notification', notification.color, {
+								transition: notification.isTransition,
+								bar: !notification.isPlayerMessage,
+								balloon: notification.isPlayerMessage,
+							})}
 							style={{transform: `translateY(${-20 - 90 * index}px)`}}
 						>
+							{notification.user && (
+								<div className="user">
+									{notification.user}
+								</div>
+							)}
 							<div className="body">
 								{notification.text}
 							</div>
-							<div className={`info ${notification.infoColor || ''}`}>
-								{notification.info}
-							</div>
+							{notification.info && (
+								<div className={`info ${notification.infoColor || ''}`}>
+									{notification.info}
+								</div>
+							)}
 						</div>
 					))}
 				</div>

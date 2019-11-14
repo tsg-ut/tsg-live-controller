@@ -14,43 +14,92 @@ html, body, .app, .notifications {
 	left: -1200px;
 	bottom: 0;
 
-	display: flex;
-
-	background: blue;
-	height: 2.5rem;
-	font-weight: bold;
-	font-size: 1.6rem;
-	color: white;
-	line-height: 2.5rem;
-
-	transition: transform 0.5s;
-
 	animation: appear 1s cubic-bezier(0.19, 1, 0.22, 1) both;
 
-	.body, .info {
-		position: relative;
-		padding-left: 1rem;
+	&.bar {
+		display: flex;
 
-		&::after {
-			content: '';
-			position: absolute;
-			width: 0;
-			height: 0;
-			left: 100%;
-			bottom: 0;
-			border-bottom: 2.5rem solid #F44336;
-			border-right: 0.5rem solid transparent;
-			z-index: 1;
+		height: 2.5rem;
+		font-weight: bold;
+		font-size: 1.6rem;
+		color: white;
+		line-height: 2.5rem;
+
+		transition: transform 0.5s;
+
+		.body, .info {
+			position: relative;
+			padding-left: 1rem;
+
+			&::after {
+				content: '';
+				position: absolute;
+				width: 0;
+				height: 0;
+				left: 100%;
+				bottom: 0;
+				border-bottom: 2.5rem solid #F44336;
+				border-right: 0.5rem solid transparent;
+				z-index: 1;
+			}
+		}
+
+		.info {
+			padding-right: 0.3rem;
+			font-size: 1.3rem;
 		}
 	}
 
-	.info {
-		padding-right: 0.3rem;
-		font-size: 1.3rem;
+	&.balloon {
+		background-color: transparent;
+
+		transition: transform 0.5s;
+
+		.user {
+			position: relative;
+			transform: translate(40px, 55px);
+			font-size: 0.6rem;
+			font-weight: bold;
+		}
+
+		.body {
+			position: relative;
+
+			transform: translate(30px, -20px);
+
+			max-width: 900px;
+			height: 1.3rem;
+			line-height: 1.3rem;
+			font-size: 0.9rem;
+
+			padding: 0.2rem 0.5rem;
+			border-radius: 0.5rem;
+
+			background-color: white;
+
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		&::before {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: -0.3rem;
+			transform: translate(30px, -20px);
+
+			border-left: 0.3rem transparent solid;
+			border-bottom: 0.8rem white solid;
+			border-right: 0.5rem white solid;
+		}
 	}
 
 	&.red {
-		.body {
+		.user {
+			color: #F44336;
+		}
+		&:not(.balloon) .body {
 			background-color: #F44336;
 			&::after {
 				border-bottom-color: #F44336;
@@ -68,7 +117,10 @@ html, body, .app, .notifications {
 	}
 
 	&.blue {
-		.body {
+		.user {
+			color: #3F51B5;
+		}
+		&:not(.balloon) .body {
 			background-color: #3F51B5;
 			&::after {
 				border-bottom-color: #3F51B5;

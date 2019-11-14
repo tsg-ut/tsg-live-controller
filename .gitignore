@@ -61,3 +61,7 @@ typings/
 .next
 
 *.mp3
+
+*.json
+!package.json
+!package-lock.json
