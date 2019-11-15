@@ -64,7 +64,7 @@ module.exports = class App extends React.Component {
 			nextLive: '',
 			nextCount: '',
 			countEnd: null,
-			countTime: 0,
+			countTime: 75,
 		};
 
 		this.initialize();
@@ -485,12 +485,14 @@ module.exports = class App extends React.Component {
 						>
 							カウント<br/>開始
 						</button>
-						<input
-							className="count-time"
-							type="number"
-							value={this.state.countTime}
-							onChange={this.handleChangeCountTime}
-						/>
+						<div class="time-area">
+							<input
+								className="count-time"
+								type="number"
+								value={this.state.countTime}
+								onChange={this.handleChangeCountTime}
+							/>分
+						</div>
 					</div>
 					<button
 						type="button"
