@@ -13,6 +13,7 @@ const youtube = require('./youtube.js');
 const hackerrank = require('./hackerrank.js');
 const twitter = require('./twitter.js');
 const playerComment = require('./player-comment.js');
+const anonymousComment = require('./anonymous-comment.js');
 
 firebase.initializeApp({
 	credential: firebase.credential.applicationDefault(),
@@ -64,5 +65,6 @@ youtube(io);
 hackerrank(io);
 twitter(io);
 playerComment(io, db);
+anonymousComment(io, db);
 
 module.exports = app;

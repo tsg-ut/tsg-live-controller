@@ -172,7 +172,7 @@ module.exports = class App extends React.Component {
 						id,
 						color: data.team === 0 ? 'red' : 'blue',
 						text: data.text,
-						user: data.user,
+						user: data.username,
 						isPlayerMessage: true,
 					}),
 				}), resolve);
