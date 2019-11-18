@@ -1,6 +1,7 @@
 const qs = require('querystring');
 const React = require('react');
 const classNames = require('classnames');
+const {default: Slider} = require('react-slick');
 
 require('@babel/polyfill');
 require('core-js/stage/4');
@@ -248,6 +249,28 @@ module.exports = class App extends React.Component {
 							)}
 						</div>
 					))}
+				</div>
+				<div className="carousel">
+					<Slider
+						infinite
+						arrows={false}
+						slidesToShow={1}
+						slidesToScroll={1}
+						autoplay
+						speed={2000}
+						autoplaySpeed={10000}
+						cssEase="linear"
+					>
+						<div>
+							<img src="images/carousel1.png"/>
+						</div>
+						<div>
+							<img src="images/carousel2.png"/>
+						</div>
+						<div>
+							<img src="images/carousel3.png"/>
+						</div>
+					</Slider>
 				</div>
 				{this.state.timer !== null && (
 					<div className="timer">
