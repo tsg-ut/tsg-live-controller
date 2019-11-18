@@ -111,7 +111,7 @@ module.exports = class App extends React.Component {
 				this.handleStartLive({startCount: nextCountStart === 0});
 			}
 
-			if (prevTime < nextCount && nextCount <= newTime) {
+			if (prevTime < nextCountStart && nextCountStart <= newTime) {
 				this.handleStartCount();
 			}
 		}
