@@ -52,6 +52,7 @@ module.exports = class App extends React.Component {
 		this.state = {
 			mics: [],
 			scenes: [],
+			transitions: [],
 			nextScene: null,
 			endScene: null,
 			volume: 0.5,
@@ -79,6 +80,7 @@ module.exports = class App extends React.Component {
 		await Promise.all([
 			this.handleUpdateSources(),
 			this.handleUpdateScenes(),
+			this.handleUpdateTransitions(),
 		]);
 
 		socket.on('update', () => {
@@ -182,6 +184,13 @@ module.exports = class App extends React.Component {
 		});
 	}
 
+	handleUpdateTransitions = async () => {
+		const data = await obs.send('GetTransitionList');
+		this.setState({
+			transitions: data.transitions,
+		});
+	}
+
 	handleInputChange = async (type) => {
 		const mic = this.state.mics.find((mic) => mic.type === type);
 		this.setState({
@@ -212,20 +221,43 @@ module.exports = class App extends React.Component {
 			});
 			await wait(500);
 		}
-		while (volume > 0) {
-			volume = Math.max(volume - 0.03, 0);
-			await new Promise((resolve) => {
-				this.setState({volume}, resolve);
-			});
-			await wait(500);
-		}
-		this.setState({
-			playing: false,
-			phase: 'stop',
-		});
+
+		await Promise.all([
+			(async () => {
+				await wait(3000);
+				await obs.send('SetCurrentTransition', {'transition-name': 'フェード'});
+				await obs.send('SetTransitionDuration', {duration: 5000});
+				await obs.send('SetCurrentScene', {'scene-name': '黒'});
+			})(),
+			(async () => {
+				while (volume > 0) {
+					volume = Math.max(volume - 0.03, 0);
+					await new Promise((resolve) => {
+						this.setState({volume}, resolve);
+					});
+					await wait(500);
+				}
+				this.setState({
+					playing: false,
+					phase: 'stop',
+				});
+			})(),
+		]);
 	}
 
 	handleStartLive = async ({startCount = false} = {}) => {
+		await new Promise((resolve) => {
+			this.setState({
+				playing: false,
+			}, resolve);
+		});
+		await obs.send('SetCurrentTransition', {'transition-name': 'イントロ'});
+		await obs.send('SetCurrentScene', {'scene-name': this.state.nextScene});
+		await obs.send('SetMute', {source: 'デスクトップ音声', mute: true});
+
+		await wait(8000);
+
+		await obs.send('SetMute', {source: 'デスクトップ音声', mute: false});
 		if (startCount) {
 			const countEnd = Date.now() + this.state.countTime * 60 * 1000;
 			socket.emit('start-timer', countEnd);
@@ -247,9 +279,6 @@ module.exports = class App extends React.Component {
 			});
 		}
 
-		obs.send('SetCurrentScene', {
-			'scene-name': this.state.nextScene,
-		});
 		for (const mic of this.state.mics) {
 			await obs.send('SetMute', {
 				source: mic.name,
@@ -315,6 +344,8 @@ module.exports = class App extends React.Component {
 	}
 
 	handleEndLive = async () => {
+		await obs.send('SetCurrentTransition', {'transition-name': 'フェード'});
+		await obs.send('SetTransitionDuration', {duration: 1000});
 		await obs.send('SetCurrentScene', {
 			'scene-name': this.state.endScene,
 		});
