@@ -2,6 +2,7 @@ const qs = require('querystring');
 const React = require('react');
 const classNames = require('classnames');
 const {default: Slider} = require('react-slick');
+const configs = require('./live-configs.js');
 
 require('@babel/polyfill');
 require('core-js/stage/4');
@@ -29,12 +30,14 @@ module.exports = class App extends React.Component {
 		super(props);
 
 		const params = qs.parse(location.search.slice(1));
-		const timer = parseInt(params.timer);
+		const timer = params.config ? configs[params.config].timer : 0;
+		const staffs = params.config ? configs[params.config].staffs : [];
 
 		this.state = {
 			notifications: [],
 			chats: [],
-			timer: timer === 0 ? null : ((timer || 75) * 60 * 1000),
+			timer: timer === null ? null : ((timer || 75) * 60 * 1000),
+			staffs,
 		};
 
 		this.timerSatrt = null;
@@ -261,6 +264,14 @@ module.exports = class App extends React.Component {
 						autoplaySpeed={10000}
 						cssEase="linear"
 					>
+						<div className="staffs">
+							{this.state.staffs.map((staff) => (
+								<div key={staff.role} className="staff">
+									<div className={`role ${staff.color}`}>{staff.role}</div>
+									<div className="members">{staff.members.join(' / ')}</div>
+								</div>
+							))}
+						</div>
 						<div>
 							<img src="images/carousel1.png"/>
 						</div>

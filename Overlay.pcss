@@ -170,7 +170,73 @@ html, body, .app, .notifications {
 	position: absolute;
 	bottom: 310px;
 	right: 0;
-	color: black;
+	color: white;
+
+	.staffs {
+		padding: 0.3rem 1rem;
+		line-height: 1rem;
+	}
+
+	.staff {
+		display: flex;
+		align-items: center;
+		font-size: 0.6rem;
+
+		.role {
+			color: white;
+			font-weight: bold;
+			height: 0.8rem;
+			line-height: 0.8rem;
+			position: relative;
+			padding: 0 0.2rem;
+			margin-right: 0.5rem;
+
+			&::before, &::after {
+				content: '';
+				position: absolute;
+			}
+
+			&::before {
+				right: 100%;
+				top: 0;
+				border-left: solid 0.3rem transparent;
+				border-bottom: solid 0.8rem transparent;
+			}
+
+			&::after {
+				left: 100%;
+				top: 0;
+				border-right: solid 0.3rem transparent;
+				border-top: solid 0.8rem transparent;
+			}
+
+			&.green {
+				background-color: #0C781D;
+				&::before, &::after {
+					border-top-color: #0C781D;
+					border-bottom-color: #0C781D;
+				}
+			}
+			&.red {
+				background-color: #D42626;
+				&::before, &::after {
+					border-top-color: #D42626;
+					border-bottom-color: #D42626;
+				}
+			}
+			&.blue {
+				background-color: #1C38D6;
+				&::before, &::after {
+					border-top-color: #1C38D6;
+					border-bottom-color: #1C38D6;
+				}
+			}
+		}
+
+		.members {
+			text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 2px 0 0 #000, 0 -2px 0 #000, -2px 0 0 #000, 0 2px 0 #000;
+		}
+	}
 }
 
 .timer {
