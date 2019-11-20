@@ -225,7 +225,7 @@ module.exports = class App extends React.Component {
 		let offset = 0;
 
 		return (
-			<div className="app">
+			<div className={`app ${this.state.timer === null ? '' : 'has-timer'}`}>
 				<div className="notifications">
 					{this.state.notifications.map((notification, index) => (
 						<div

@@ -9,6 +9,7 @@ html, body, .app, .notifications {
 	font-family: 'Noto Sans CJK JP', 'Noto Sans JP', 'Noto Sans', sans-serif;
 	margin: 0;
 	font-size: 30px;
+	background: gray;
 }
 
 .notification {
@@ -168,21 +169,29 @@ html, body, .app, .notifications {
 	height: 103px;
 	color: white;
 	position: absolute;
-	bottom: 310px;
+
+	bottom: 225px;
+	.app.has-timer & {
+		bottom: 310px;
+	}
 	right: 0;
 	color: white;
 
 	.staffs {
+		width: 450px;
+		overflow: hidden;
+		box-sizing: border-box;
 		padding: 0.3rem 1rem;
 		line-height: 1rem;
 	}
 
 	.staff {
 		display: flex;
-		align-items: center;
+		align-items: baseline;
 		font-size: 0.6rem;
 
 		.role {
+			flex: 0 0 auto;
 			color: white;
 			font-weight: bold;
 			height: 0.8rem;
