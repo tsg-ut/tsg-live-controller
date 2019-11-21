@@ -38,6 +38,10 @@ const sounds = mapValues({
 		file: 'gong.mp3',
 		volume: 1,
 	},
+	playerMessage: {
+		file: 'player-message.mp3',
+		volume: 1,
+	},
 }, ({file, volume}) => (
 	new Howl({
 		src: [file],
@@ -85,6 +89,9 @@ module.exports = class App extends React.Component {
 
 		socket.on('update', () => {
 			sounds.notify.play();
+		});
+		socket.on('player-message', () => {
+			sounds.playerMessage.play();
 		});
 	}
 
@@ -516,7 +523,7 @@ module.exports = class App extends React.Component {
 						>
 							カウント<br/>開始
 						</button>
-						<div class="time-area">
+						<div className="time-area">
 							<input
 								className="count-time"
 								type="number"

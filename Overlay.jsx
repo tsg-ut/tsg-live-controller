@@ -148,6 +148,33 @@ module.exports = class App extends React.Component {
 					}), resolve);
 				});
 			}
+
+			if (data.type === 'ai') {
+				const team = data.team === 0 ? '本郷' : '駒場';
+
+				await new Promise((resolve) => {
+					this.setState(({notifications}) => ({
+						notifications: notifications.concat({
+							id,
+							color: data.team === 0 ? 'red' : 'blue',
+							text: `${team}チームがコードを提出！`,
+							info: `${new Intl.NumberFormat('en-US').format(data.score)}点 ${data.isUpdated ? '(スコア更新)' : ''}`,
+							isTransition: false,
+						}),
+					}), resolve);
+				});
+				
+
+				await new Promise((resolve) => {
+					setTimeout(resolve, 30 * 1000);
+				});
+
+				await new Promise((resolve) => {
+					this.setState(({notifications}) => ({
+						notifications: notifications.filter((notification) => notification.id !== id),
+					}), resolve);
+				});
+			}
 		});
 
 		socket.on('message', async (data) => {

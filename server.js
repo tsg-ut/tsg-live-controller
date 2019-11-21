@@ -14,6 +14,7 @@ const hackerrank = require('./hackerrank.js');
 const twitter = require('./twitter.js');
 const playerComment = require('./player-comment.js');
 const anonymousComment = require('./anonymous-comment.js');
+const ai = require('./ai.js');
 
 firebase.initializeApp({
 	credential: firebase.credential.applicationDefault(),
@@ -66,5 +67,6 @@ hackerrank(io);
 twitter(io);
 playerComment(io, db);
 anonymousComment(io, db);
+ai(io);
 
 module.exports = app;
