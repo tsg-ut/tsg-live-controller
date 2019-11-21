@@ -8,7 +8,7 @@ require('core-js/stage/3');
 require('core-js/stage/2');
 require('core-js/stage/1');
 
-require('./Ctf.pcss');
+require('./Status.pcss');
 
 const socket = global.io();
 socket.on('connect', () => {
@@ -21,9 +21,24 @@ module.exports = class App extends React.Component {
 
 		this.state = {
 			solves: [[], []],
+			scores: [0, 0],
+			mode: this.getMode(),
 		};
 
 		this.initialize();
+	}
+
+	getMode() {
+		if (location.pathname === '/ctf.html') {
+			return 'ctf';
+		}
+		if (location.pathname === '/ai.html') {
+			return 'ai';
+		}
+		if (location.pathname === '/procon.html') {
+			return 'procon';
+		}
+		return null;
 	}
 
 	async initialize() {
@@ -37,8 +52,8 @@ module.exports = class App extends React.Component {
 
 	render() {
 		return (
-			<div className="app">
-				{this.state.solves.map((teamSolves, index) => {
+			<div className={`app ${this.state.mode}`}>
+				{this.state.mode === 'ctf' && this.state.solves.map((teamSolves, index) => {
 					const chunks = [
 						[3],
 						[2, 5, 8],

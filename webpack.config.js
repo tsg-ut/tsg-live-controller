@@ -4,7 +4,7 @@ module.exports = {
 	entry: {
 		index: './index.babel.js',
 		overlay: './overlay.babel.js',
-		ctf: './ctf.babel.js',
+		status: './status.babel.js',
 	},
 	mode: 'development',
 	output: {
