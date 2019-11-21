@@ -20,7 +20,7 @@ module.exports = async (io) => {
 		const data = await new Promise((resolve, reject) => {
 			oauth.get(
 				`https://api.twitter.com/1.1/search/tweets.json?${qs.encode({
-					q: '#tsg_live OR #tsglive -filter:retweets -filter:replies',
+					q: '#tsg_live OR #tsglive -filter:retweets -filter:replies -from:tsg_ut',
 					result_type: 'recent',
 					count: 20,
 				})}`,
