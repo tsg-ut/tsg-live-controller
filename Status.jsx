@@ -1,4 +1,3 @@
-const qs = require('querystring');
 const React = require('react');
 const sumBy = require('lodash/sumBy');
 
@@ -91,7 +90,7 @@ module.exports = class App extends React.Component {
 					<div key={index} className={`team ${index === 0 ? 'red' : 'blue'}`}>
 						<div className="score">{new Intl.NumberFormat('en-US').format(score)}</div>
 						<div className="bar" style={{
-							width: `${Math.log10(score + 10) / (Math.log10(this.state.scores[0] + 10) + Math.log10(this.state.scores[1] + 10)) * 100}%`,
+							width: `${50 + (score < Math.max(...this.state.scores) ? -1 : 1) * Math.log10(Math.abs(this.state.scores[0] - this.state.scores[1]) + 1) / Math.log10(1e13 + 1) * 50}%`,
 						}}/>
 					</div>
 				))}
