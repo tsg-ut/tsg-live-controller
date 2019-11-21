@@ -41,13 +41,23 @@ module.exports = class App extends React.Component {
 		return null;
 	}
 
-	async initialize() {
-		socket.on('ctf-heartbeat', async (data) => {
-			console.log(data);
-			this.setState({
-				solves: data.solves,
+	initialize() {
+		if (this.getMode() === 'ctf') {
+			socket.on('ctf-heartbeat', async (data) => {
+				console.log(data);
+				this.setState({
+					solves: data.solves,
+				});
 			});
-		});
+		}
+		if (this.getMode() === 'ai') {
+			socket.on('ai-heartbeat', async (data) => {
+				console.log(data);
+				this.setState({
+					scores: data.scores,
+				});
+			});
+		}
 	}
 
 	render() {
@@ -77,6 +87,14 @@ module.exports = class App extends React.Component {
 						</div>
 					)
 				})}
+				{this.state.mode === 'ai' && this.state.scores.map((score, index) => (
+					<div key={index} className={`team ${index === 0 ? 'red' : 'blue'}`}>
+						<div className="score">{new Intl.NumberFormat('en-US').format(score)}</div>
+						<div className="bar" style={{
+							width: `${Math.log10(score + 10) / (Math.log10(this.state.scores[0] + 10) + Math.log10(this.state.scores[1] + 10)) * 100}%`,
+						}}/>
+					</div>
+				))}
 			</div>
 		);
 	}

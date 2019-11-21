@@ -13,60 +13,102 @@ html, body, .app, .notifications {
 	display: flex;
 }
 
-.team {
-	flex: 1 1 0;
-	margin: 0 3vw;
+.app.ctf {
+	.team {
+		flex: 1 1 0;
+		margin: 0 3vw;
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		flex-direction: column;
+
+		&.red {
+			color: red;
+		}
+
+		&.blue {
+			color: blue;
+		}
+	}
+
+	.solve {
+		font-weight: bold;
+		font-size: 15vw;
+		line-height: 1em;
+	}
+
+	.chunk {
+		width: 100%;
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+	}
+
+	.challenge {
+		border-radius: 9999px;
+		background: grey;
+
+		&.chunk-0 {
+			width: 20vw;
+			height: 20vw;
+		}
+
+		&.chunk-1 {
+			width: 13vw;
+			height: 13vw;
+		}
+
+		&.chunk-2 {
+			width: 7vw;
+			height: 7vw;
+		}
+
+		.team.red &.active {
+			background: red;
+		}
+
+		.team.blue &.active {
+			background: blue;
+		}
+	}
+}
+
+.app.ai {
 	display: flex;
-	justify-content: space-around;
-	align-items: center;
-	flex-direction: column;
+	flex-direction: column-reverse;
 
-	&.red {
-		color: red;
-	}
+	.team {
+		flex: 1 1 0;
+		display: flex;
 
-	&.blue {
-		color: blue;
-	}
-}
+		&.red {
+			color: red;
+			justify-content: flex-end;
+			flex-direction: column-reverse;
+			.bar {
+				background: red;
+			}
+		}
 
-.solve {
-	font-weight: bold;
-	font-size: 15vw;
-	line-height: 1em;
-}
+		&.blue {
+			color: blue;
+			justify-content: flex-end;
+			flex-direction: column;
+			margin-bottom: 10vh;
+			.bar {
+				background: blue;
+			}
+		}
 
-.chunk {
-	width: 100%;
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
-}
+		.score {
+			text-align: center;
+			font-weight: bold;
+			font-size: 10vw;
+		}
 
-.challenge {
-	border-radius: 9999px;
-	background: grey;
-
-	&.chunk-0 {
-		width: 20vw;
-		height: 20vw;
-	}
-
-	&.chunk-1 {
-		width: 13vw;
-		height: 13vw;
-	}
-
-	&.chunk-2 {
-		width: 7vw;
-		height: 7vw;
-	}
-
-	.team.red &.active {
-		background: red;
-	}
-
-	.team.blue &.active {
-		background: blue;
+		.bar {
+			height: 15vh;
+			transition: width 1s;
+		}
 	}
 }
