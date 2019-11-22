@@ -112,3 +112,65 @@ html, body, .app, .notifications {
 		}
 	}
 }
+
+.app.procon {
+	display: flex;
+	flex-direction: row-reverse;
+
+	.team {
+		flex: 1 1 0;
+		display: flex;
+		flex-direction: column;
+
+		.row {
+			flex: 1 1 0;
+			height: 0;
+			display: flex;
+
+			.cell {
+				flex: 1 1 0;
+				margin: 1.5vmin;
+				font-weight: bold;
+				font-size: 13vmin;
+
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				&.solved {
+					color: white;
+				}
+			}
+
+			&.score {
+				font-weight: bold;
+				font-size: 20vmin;
+
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+		}
+
+		&.red .cell {
+			border: 2vmin red solid;
+			color: red;
+			&.solved {
+				background-color: red;
+			}
+		}
+		&.red .score {
+			color: red;
+		}
+		&.blue .cell {
+			border: 2vmin blue solid;
+			color: blue;
+			&.solved {
+				background-color: blue;
+			}
+		}
+		&.blue .score {
+			color: blue;
+		}
+	}
+}

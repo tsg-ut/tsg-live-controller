@@ -1,5 +1,6 @@
 const React = require('react');
 const sumBy = require('lodash/sumBy');
+const sum = require('lodash/sum');
 
 require('@babel/polyfill');
 require('core-js/stage/4');
@@ -57,6 +58,21 @@ module.exports = class App extends React.Component {
 				});
 			});
 		}
+		if (this.getMode() === 'procon') {
+			socket.on('hackerrank-heartbeat', async (data) => {
+				console.log(data);
+				this.setState({
+					solves: data.solves,
+				});
+			});
+		}
+	}
+
+	getScore(chals) {
+		return sum(chals.map((chal) => {
+			const score = {A: 100, B: 200, C: 300, D: 400, E: 500, F: 600, G: 700}[chal];
+			return score || 0;
+		}));
 	}
 
 	render() {
@@ -92,6 +108,20 @@ module.exports = class App extends React.Component {
 						<div className="bar" style={{
 							width: `${50 + (score < Math.max(...this.state.scores) ? -1 : 1) * Math.log10(Math.abs(this.state.scores[0] - this.state.scores[1]) + 1) / Math.log10(1e13 + 1) * 50}%`,
 						}}/>
+					</div>
+				))}
+				{this.state.mode === 'procon' && this.state.solves.map((chals, index) => (
+					<div key={index} className={`team ${index === 0 ? 'red' : 'blue'}`}>
+						{[['A', 'B', 'C'], ['D', 'E'], ['F', 'G']].map((ids, idsIndex) => (
+							<div key={idsIndex} className="row">
+								{ids.map((id, idIndex) => (
+									<div key={idIndex} className={`cell ${chals.includes(id) ? 'solved' : ''}`}>
+										{id}
+									</div>
+								))}
+							</div>
+						))}
+						<div className="row score">{this.getScore(chals)}</div>
 					</div>
 				))}
 			</div>
