@@ -3,27 +3,42 @@ module.exports = {
 		staffs: [
 			{
 				role: 'パーソナリティ',
-				members: ['hakatashi', 'kuromunori', 'hideo54'],
+				members: ['hideo54', '昆布', 'iLiss.'],
 				color: 'green',
 			},
 		],
 		timer: null,
 	},
+	game: {
+		staffs: [
+			{
+				role: '解説',
+				members: ['fiord', 'CoiL'],
+				color: 'green',
+			},
+			{
+				role: 'プレイヤー',
+				members: ['azaika'],
+				color: 'blue',
+			},
+		],
+		timer: 90,
+	},
 	golf: {
 		staffs: [
 			{
 				role: '解説',
-				members: ['taiyoslime', 'bitmath'],
+				members: ['fiord', 'うら'],
 				color: 'green',
 			},
 			{
-				role: '駒場チーム',
-				members: ['iLiss.', 'うら'],
+				role: '関東チーム',
+				members: ['azaika', 'iLiss.'],
 				color: 'blue',
 			},
 			{
-				role: '本郷チーム',
-				members: ['moratorium08', 'kuromunori'],
+				role: '関西チーム',
+				members: ['ナン', 'しとお'],
 				color: 'red',
 			},
 		],
@@ -33,17 +48,17 @@ module.exports = {
 		staffs: [
 			{
 				role: '解説',
-				members: ['ナン', 'kuromunori'],
+				members: ['CoiL', 'platypus'],
 				color: 'green',
 			},
 			{
-				role: '駒場チーム',
-				members: ['JP3BGY'],
+				role: '関東チーム',
+				members: ['うら'],
 				color: 'blue',
 			},
 			{
-				role: '本郷チーム',
-				members: ['fiord'],
+				role: '関西チーム',
+				members: ['ナン'],
 				color: 'red',
 			},
 		],
@@ -53,60 +68,65 @@ module.exports = {
 		staffs: [
 			{
 				role: '解説',
-				members: ['taiyoslime', 'ナン'],
+				members: ['hakatashi', 'うら'],
 				color: 'green',
 			},
 			{
 				role: 'プレイヤー',
-				members: ['うら'],
+				members: ['hideo54'],
 				color: 'blue',
 			},
 		],
 		timer: 90,
 	},
-	hacking: {
-		staffs: [
-			{
-				role: 'パーソナリティ',
-				members: ['hakatashi', 'JP3BGY'],
-				color: 'green',
-			},
-		],
-		timer: null,
-	},
-	game3: {
+	golf2: {
 		staffs: [
 			{
 				role: '解説',
-				members: ['moratorium08', 'satos'],
+				members: ['fiord', 'ナン'],
 				color: 'green',
 			},
 			{
-				role: 'プレイヤー',
-				members: ['hakatashi'],
+				role: 'TSGチーム',
+				members: ['うら', 'hakatashi'],
+				color: 'blue',
+			},
+			{
+				role: '外部チーム',
+				members: ['kotatsugameさん', '%20さん'],
 				color: 'red',
 			},
 		],
-		timer: 90,
+		timer: 75,
 	},
 	ctf: {
 		staffs: [
 			{
 				role: '解説',
-				members: ['hakatashi', 'bitmath'],
+				members: ['JP3BGY', 'ナン'],
 				color: 'green',
 			},
 			{
-				role: '駒場チーム',
-				members: ['ナン', 'JP3BGY', 'taiyoslime'],
+				role: '関東チーム',
+				members: ['iLiss.', 'azaika', 'bitmath'],
 				color: 'blue',
 			},
 			{
-				role: '本郷チーム',
-				members: ['moratorium08', 'fiord', 'satos'],
+				role: '関西チーム',
+				members: ['fiord', 'CoiL', 'hideo54'],
 				color: 'red',
 			},
 		],
 		timer: 75,
+	},
+	hacking: {
+		staffs: [
+			{
+				role: 'パーソナリティ',
+				members: ['hakatashi', 'satos', 'ナン'],
+				color: 'green',
+			},
+		],
+		timer: null,
 	},
 };
