@@ -74,7 +74,7 @@ module.exports = {
 			{
 				role: 'プレイヤー',
 				members: ['hideo54'],
-				color: 'blue',
+				color: 'red',
 			},
 		],
 		timer: 90,
