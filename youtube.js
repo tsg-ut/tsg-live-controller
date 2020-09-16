@@ -3,6 +3,10 @@ const xml2js = require('xml2js');
 const {promisify} = require('util');
 const get = require('lodash/get');
 
+require('dotenv').config();
+
+const slack = require('./slack');
+
 const parser = new xml2js.Parser();
 
 const commentFile = process.env.LIVE_COMMENTS_FILE;
@@ -21,11 +25,13 @@ module.exports = async (io) => {
 			if (!commentSet.has(comment.$.time)) {
 				commentSet.add(comment.$.time);
 				if (!isInit) {
+					const text = comment._;
 					io.emit('message', {
-						text: comment._,
+						text,
 						username: comment.$.handle,
 						type: comment.$.service,
 					});
+					slack('youtube', text);
 				}
 			}
 		}

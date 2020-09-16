@@ -3,6 +3,8 @@ const {range} = require('lodash');
 const qs = require('querystring');
 require('dotenv').config();
 
+const slack = require('./slack');
+
 const tweetSet = new Set();
 
 module.exports = async (io) => {
@@ -72,6 +74,10 @@ module.exports = async (io) => {
 					username: tweet.user.name,
 					type: 'twitter',
 				});
+
+				const tweetUrl = `https://twitter.com/${user.screen_name}/${id_str}`;
+
+				slack('twitter', text, tweetUrl);
 			}
 		}
 	};
