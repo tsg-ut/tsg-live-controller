@@ -75,7 +75,7 @@ module.exports = async (io) => {
 					type: 'twitter',
 				});
 
-				const tweetUrl = `https://twitter.com/${user.screen_name}/${id_str}`;
+				const tweetUrl = `https://twitter.com/${tweet.user.screen_name}/${tweet.id_str}`;
 
 				slack('twitter', text, tweetUrl);
 			}
