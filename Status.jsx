@@ -58,14 +58,14 @@ module.exports = class App extends React.Component {
 				});
 			});
 		}
-		if (this.getMode() === 'procon') {
-			socket.on('hackerrank-heartbeat', async (data) => {
-				console.log(data);
-				this.setState({
-					solves: data.solves,
-				});
-			});
-		}
+		// if (this.getMode() === 'procon') {
+		// 	socket.on('hackerrank-heartbeat', async (data) => {
+		// 		console.log(data);
+		// 		this.setState({
+		// 			solves: data.solves,
+		// 		});
+		// 	});
+		// }
 	}
 
 	getScore(chals) {
