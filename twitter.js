@@ -69,15 +69,52 @@ module.exports = async (io) => {
 
 				const text = chars.join('').replace(/\s+/g, ' ').trim().slice(0, 60);
 
+				console.log(text);
+
 				io.emit('message', {
 					text,
 					username: tweet.user.name,
 					type: 'twitter',
 				});
 
+				const userDescription = (tweet.user.isProtected ? ':lock:' : '')
+				+ ` ${tweet.user.name} `
+				+ `<https://twitter.com/${tweet.user.screen_name}|@${tweet.user.screen_name}>`;
+
 				const tweetUrl = `https://twitter.com/${tweet.user.screen_name}/${tweet.id_str}`;
 
-				slack('twitter', text, tweetUrl);
+				slack('twitter', text, {
+					blocks: [
+						{
+							type: 'context',
+							elements: [
+								{
+									type: 'image',
+									image_url: tweet.user.profile_image_url_https,
+									alt_text: `@${tweet.user.screen_name}'s icon`,
+								},
+								{
+									type: 'mrkdwn',
+									text: userDescription + '\n' + tweet.user.description,
+								},
+							],
+						},
+						{
+							type: 'section',
+							text: {
+								type: 'mrkdwn',
+								text: text,
+							},
+						},
+						{
+							type: 'context',
+							elements: [{
+								type: 'mrkdwn',
+								text: tweetUrl,
+							}],
+						},
+					],
+				});
 			}
 		}
 	};
