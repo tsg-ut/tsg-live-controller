@@ -13,7 +13,8 @@ module.exports = (io) => {
 	const languageMap = new Map();
 
 	const updateLanguages = async () => {
-		const {data: languages} = await axios.get(`${process.env.ESOLANG_HOST}/api/contests/${process.env.ESOLANG_CONTEST}/languages`);
+		const contest = process.env.ESOLANG_CONTEST;
+		const {data: languages} = await axios.get(`${process.env.ESOLANG_HOST}/api/contests/${contest}/languages`);
 		for (const language of languages) {
 			if (!language.slug) {
 				continue;
@@ -32,6 +33,7 @@ module.exports = (io) => {
 			if (previousLanguage.size !== size) {
 				io.emit('update', {
 					type: 'esolang',
+					contest,
 					language: name,
 					from: previousLanguage.team === null ? null : (previousLanguage.team === 0 ? 'red' : 'blue'),
 					fromBytes: previousLanguage.size,

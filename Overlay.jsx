@@ -50,7 +50,9 @@ module.exports = class App extends React.Component {
 			const id = Math.random().toString();
 
 			if (data.type === 'esolang') {
-				const team = data.to === 'red' ? '本郷' : '駒場';
+				const team = data.contest === 'mayfes2020-day2'
+					? data.to === 'red' ? 'TSG' : '外部'
+					: data.to === 'red' ? '関東' : '関西';
 				const info = data.fromBytes === null ? data.toBytes.toString() : `${data.fromBytes} → ${data.toBytes}`;
 				const action = (() => {
 					if (data.from === null) {
@@ -87,7 +89,7 @@ module.exports = class App extends React.Component {
 			}
 
 			if (data.type === 'ctf') {
-				const team = data.team === 0 ? '本郷' : '駒場';
+				const team = data.team === 0 ? '関東' : '関西';
 
 				await new Promise((resolve) => {
 					this.setState(({notifications}) => ({
@@ -112,45 +114,45 @@ module.exports = class App extends React.Component {
 				});
 			}
 
-			if (data.type === 'hackerrank') {
-				const team = data.team === 0 ? '本郷' : '駒場';
-				const statusMap = new Map([
-					['Accepted', 'AC'],
-					['Compilation error', 'CE'],
-					['Wrong Answer', 'WA'],
-					['Terminated due to timeout', 'TLE'],
-					['Runtime Error', 'RE'],
-					['Segmentation Fault', 'RE'],
-				]);
-				const status = statusMap.get(data.status) || data.status;
+			// if (data.type === 'hackerrank') {
+			// 	const team = data.team === 0 ? '本郷' : '駒場';
+			// 	const statusMap = new Map([
+			// 		['Accepted', 'AC'],
+			// 		['Compilation error', 'CE'],
+			// 		['Wrong Answer', 'WA'],
+			// 		['Terminated due to timeout', 'TLE'],
+			// 		['Runtime Error', 'RE'],
+			// 		['Segmentation Fault', 'RE'],
+			// 	]);
+			// 	const status = statusMap.get(data.status) || data.status;
 
-				await new Promise((resolve) => {
-					this.setState(({notifications}) => ({
-						notifications: notifications.concat({
-							id,
-							color: data.team === 0 ? 'red' : 'blue',
-							text: `${team}チームが【 ${data.challenge} 】を提出！`,
-							info: status,
-							infoColor: status === 'AC' ? 'green' : 'orange',
-							isTransition: false,
-						}),
-					}), resolve);
-				});
+			// 	await new Promise((resolve) => {
+			// 		this.setState(({notifications}) => ({
+			// 			notifications: notifications.concat({
+			// 				id,
+			// 				color: data.team === 0 ? 'red' : 'blue',
+			// 				text: `${team}チームが【 ${data.challenge} 】を提出！`,
+			// 				info: status,
+			// 				infoColor: status === 'AC' ? 'green' : 'orange',
+			// 				isTransition: false,
+			// 			}),
+			// 		}), resolve);
+			// 	});
 				
 
-				await new Promise((resolve) => {
-					setTimeout(resolve, 30 * 1000);
-				});
+			// 	await new Promise((resolve) => {
+			// 		setTimeout(resolve, 30 * 1000);
+			// 	});
 
-				await new Promise((resolve) => {
-					this.setState(({notifications}) => ({
-						notifications: notifications.filter((notification) => notification.id !== id),
-					}), resolve);
-				});
-			}
+			// 	await new Promise((resolve) => {
+			// 		this.setState(({notifications}) => ({
+			// 			notifications: notifications.filter((notification) => notification.id !== id),
+			// 		}), resolve);
+			// 	});
+			// }
 
 			if (data.type === 'ai') {
-				const team = data.team === 0 ? '本郷' : '駒場';
+				const team = data.team === 0 ? '関東' : '関西';
 
 				await new Promise((resolve) => {
 					this.setState(({notifications}) => ({
