@@ -13,15 +13,23 @@ hakatashi が作った、OBS のリモート操作ソフト。
 * マルチコメントビュアーでコメジェネ連携を設定
 * .env に comment.xml のパスを指定
 
-## リモコン操作
-
-### 登場人物
-
-* localhost:8080
-
 ## overlay.html
 
 localhost:8080/overlay.html?config=(企画ID: live-configs.js の key)
+
+ちなみに、TSG LIVE! 5 での key は以下の通り:
+* opening
+* game
+* golf
+* marathon
+* game2
+* golf2
+* ctf
+* hacking
+
+## リモコン操作
+
+localhost:8080
 
 * 「ライブ中シーン」「ライブ終了シーン」を選択しておく
 * 「ライブ開始時刻」を設定。
