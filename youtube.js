@@ -37,9 +37,13 @@ module.exports = async (io) => {
 		}
 	};
 
-	watcher.on('change', () => {
-		updateComments(false);
-	});
+	// The best way except for WSL
+	// watcher.on('change', () => {
+	// 	updateComments(false);
+	// });
 
 	updateComments(true);
+	setInterval(() => {
+		updateComments(false);
+	}, 5 * 1000); // 5s
 };
