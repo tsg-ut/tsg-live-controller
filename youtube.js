@@ -25,13 +25,13 @@ module.exports = async (io) => {
 			if (!commentSet.has(comment.$.time)) {
 				commentSet.add(comment.$.time);
 				if (!isInit) {
+					const username = comment.$.handle;
 					const text = comment._;
 					io.emit('message', {
-						text,
-						username: comment.$.handle,
+						text, username,
 						type: comment.$.service,
 					});
-					slack('youtube', text);
+					slack('youtube', `*${username}*\n${text}`);
 				}
 			}
 		}
