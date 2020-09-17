@@ -4,10 +4,10 @@ const {last} = require('lodash');
 require('dotenv').config();
 
 const getTeam = (user) => {
-	if (user === '@JP3BGY') {
+	if (user === '@n4o847') {
 		return 0;
 	}
-	if (user === '@__Hyoga') {
+	if (user === '@naan112358') {
 		return 1;
 	}
 	return null;
