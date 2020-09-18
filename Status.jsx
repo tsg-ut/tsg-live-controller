@@ -129,7 +129,7 @@ module.exports = class App extends React.Component {
 					));
 
 					return (
-						<g className={`team ${index === 0 ? 'red' : 'blue'}`} align={`${index === 0 ? 'left' : 'right'}`} transform={`translate(30, 30)`}>
+						<g className={`team ${index === 0 ? 'blue' : 'red'}`} align={`${index === 0 ? 'left' : 'right'}`} transform={`translate(30, 30)`}>
 							{index === 0 ? <text className="solve" transform={`translate(75, -5)`} textAnchor="end">{score}</text> : <text/>}
 							{challengeIds.map((cid) => (
 								<path id={`${id[index][cid]}`} className={`challenge ${teamSolves.includes(cid) ? "active" : ""}`} d={`${pathes[index][cid]}`}/>
