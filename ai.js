@@ -3,11 +3,13 @@ const {last} = require('lodash');
 
 require('dotenv').config();
 
+const slack = require('./slack');
+
 const getTeam = (user) => {
-	if (user === '@n4o847') {
+	if (user === '@n4o847' || user === '@azaika') {
 		return 0;
 	}
-	if (user === '@naan112358') {
+	if (user === '@naan112358' || user === '@hideo54') {
 		return 1;
 	}
 	return null;
@@ -77,6 +79,8 @@ module.exports = (io) => {
 				scores,
 				isUpdated,
 			});
+			const teamName = data.team === 0 ? '関東' : '関西';
+			slack('ai', `${teamName}チームがコードを提出! ${new Intl.NumberFormat('en-US').format(score)}点${isUpdated ? ' (スコア更新)' : ''}`);
 		}
 
 		io.emit('ai-heartbeat', {
