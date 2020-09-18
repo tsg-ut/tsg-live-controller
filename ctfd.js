@@ -35,7 +35,8 @@ module.exports = (io) => {
 					name,
 					value,
 				});
-				slack('ctf', `${team}が${category}の${name}を解きました! (+${value})`);
+				const team = data.team === 0 ? '関東' : '関西';
+				slack('ctf', `${team}チームが【${name}】(${category}) を解きました! (+${value} pt)`);
 			}
 		}
 
