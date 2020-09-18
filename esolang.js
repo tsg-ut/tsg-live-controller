@@ -1,6 +1,9 @@
 const socketIoClient = require('socket.io-client');
 const axios = require('axios');
 
+require('dotenv').config();
+const slack = require('./slack');
+
 module.exports = (io) => {
 	const esolangClient = socketIoClient(process.env.ESOLANG_HOST);
 	esolangClient.on('update-languages', (data) => {
@@ -31,16 +34,28 @@ module.exports = (io) => {
 
 			const previousLanguage = languageMap.get(language.slug);
 			if (previousLanguage.size !== size) {
+				const from = previousLanguage.team === null ? null : (previousLanguage.team === 0 ? 'red' : 'blue');
+				const to = team === null ? null : (team === 0 ? 'red' : 'blue');
+				const teamName = data.contest === 'mayfes2020-day2'
+					? data.to === 'blue' ? 'TSG' : '外部'
+					: data.to === 'blue' ? '関東' : '関西';
 				io.emit('update', {
 					type: 'esolang',
 					contest,
 					language: name,
-					from: previousLanguage.team === null ? null : (previousLanguage.team === 0 ? 'red' : 'blue'),
+					from,
 					fromBytes: previousLanguage.size,
-					to: team === null ? null : (team === 0 ? 'red' : 'blue'),
+					to,
 					toBytes: size,
 				});
 				languageMap.set(language.slug, {name, size, team});
+				if (from === null) {
+					slack('golf', `${teamName}チームが【${data.language}】を獲得!`);
+				} else if (from === to) {
+					slack('golf', `${teamName}チームが【${data.language}】を短縮!!`);
+				} else {
+					slack('golf', `${teamName}チームが【${data.language}】を奪取!!`);
+				}
 			}
 		}
 	};

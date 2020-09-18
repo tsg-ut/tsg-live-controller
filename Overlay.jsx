@@ -51,8 +51,8 @@ module.exports = class App extends React.Component {
 
 			if (data.type === 'esolang') {
 				const team = data.contest === 'mayfes2020-day2'
-					? data.to === 'red' ? 'TSG' : '外部'
-					: data.to === 'red' ? '関東' : '関西';
+					? data.to === 'blue' ? 'TSG' : '外部'
+					: data.to === 'blue' ? '関東' : '関西';
 				const info = data.fromBytes === null ? data.toBytes.toString() : `${data.fromBytes} → ${data.toBytes}`;
 				const action = (() => {
 					if (data.from === null) {

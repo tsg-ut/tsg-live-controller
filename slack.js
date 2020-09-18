@@ -27,6 +27,11 @@ module.exports = async (type, text, additionalParams) => {
             username: 'CTF',
             icon_emoji: ':flags:',
         };
+    } else if (type === 'golf') {
+        templateParams = {
+            username: 'Golf',
+            icon_emoji: ':golf:',
+        };
     }
     const params = {...templateParams, ...additionalParams};
     await web.chat.postMessage({
