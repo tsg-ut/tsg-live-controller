@@ -22,6 +22,11 @@ module.exports = async (type, text, additionalParams) => {
             username: 'YouTube Live! コメント',
             icon_emoji: ':youtube:',
         };
+    } else if (type === 'ctf') {
+        templateParams = {
+            username: 'CTF',
+            icon_emoji: ':flags:',
+        };
     }
     const params = {...templateParams, ...additionalParams};
     await web.chat.postMessage({

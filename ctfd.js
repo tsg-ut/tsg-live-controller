@@ -1,11 +1,14 @@
 const axios = require('axios');
 require('dotenv').config();
 
+const slack = require('./slack');
+
 module.exports = (io) => {
 	const solvesSets = [new Set(), new Set()];
 
 	const updateSolves = async ({init = false} = {}) => {
-		for (const [index, team] of [1, 2].entries()) {
+		// for (const [index, team] of [1, 2].entries()) {
+		for (const [index, team] of [1, 3].entries()) { // test
 			const {data: {data: solves}} = await axios.get(`${process.env.CTFD_HOST}/api/v1/teams/${team}/solves`);
 			const solvesSet = solvesSets[index];
 
@@ -32,6 +35,7 @@ module.exports = (io) => {
 					name,
 					value,
 				});
+				slack('ctf', `${team}が${category}の${name}を解きました! (+${value})`);
 			}
 		}
 
