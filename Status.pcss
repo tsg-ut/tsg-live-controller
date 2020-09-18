@@ -15,25 +15,19 @@ html, body, .app, .notifications {
 
 .app.ctf {
 	.team {
-		flex: 1 1 0;
-		margin: 0 3vw;
-		display: flex;
-		justify-content: space-around;
-		align-items: center;
-		flex-direction: column;
 
 		&.red {
-			color: red;
+			fill: red;
 		}
 
 		&.blue {
-			color: blue;
+			fill: blue;
 		}
 	}
 
 	.solve {
 		font-weight: bold;
-		font-size: 15vw;
+		font-size: 15;
 		line-height: 1em;
 	}
 
@@ -44,32 +38,40 @@ html, body, .app, .notifications {
 		align-items: center;
 	}
 
-	.challenge {
-		border-radius: 9999px;
-		background: grey;
+}
 
-		&.chunk-0 {
-			width: 20vw;
-			height: 20vw;
-		}
+.challenge {
+	fill: grey;
+	fill-opacity: 1;
+	stroke: #ffffff;
+	stroke-width: 2.5;
+	stroke-linecap: round;
+	stroke-linejoin: miter;
+	stroke-miterlimit: 4;
+	stroke-dasharray: none;
+	stroke-opacity: 1;
 
-		&.chunk-1 {
-			width: 13vw;
-			height: 13vw;
-		}
+	&.chunk-0 {
+		width: 20vw;
+		height: 20vw;
+	}
 
-		&.chunk-2 {
-			width: 7vw;
-			height: 7vw;
-		}
+	&.chunk-1 {
+		width: 13vw;
+		height: 13vw;
+	}
 
-		.team.red &.active {
-			background: red;
-		}
+	&.chunk-2 {
+		width: 7vw;
+		height: 7vw;
+	}
 
-		.team.blue &.active {
-			background: blue;
-		}
+	.team.red &.active {
+		fill: red;
+	}
+
+	.team.blue &.active {
+		fill: blue;
 	}
 }
 
