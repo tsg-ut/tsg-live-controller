@@ -79,7 +79,7 @@ module.exports = (io) => {
 				scores,
 				isUpdated,
 			});
-			const teamName = data.team === 0 ? '関東' : '関西';
+			const teamName = data.team === 1 ? '関東' : '関西';
 			slack('ai', `${teamName}チームがコードを提出! ${new Intl.NumberFormat('en-US').format(score)}点${isUpdated ? ' (スコア更新)' : ''}`);
 		}
 
