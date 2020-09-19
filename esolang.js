@@ -36,9 +36,9 @@ module.exports = (io) => {
 			if (previousLanguage.size !== size) {
 				const from = previousLanguage.team === null ? null : (previousLanguage.team === 0 ? 'blue' : 'red');
 				const to = team === null ? null : (team === 0 ? 'blue' : 'red');
-				const teamName = data.contest === 'mayfes2020-day2'
-					? data.to === 'blue' ? 'TSG' : '外部'
-					: data.to === 'blue' ? '関東' : '関西';
+				const teamName = contest === 'mayfes2020-day2'
+					? to === 'blue' ? 'TSG' : '外部'
+					: to === 'blue' ? '関東' : '関西';
 				io.emit('update', {
 					type: 'esolang',
 					contest,
