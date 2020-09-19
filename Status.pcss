@@ -77,7 +77,7 @@ html, body, .app, .notifications {
 
 .app.ai {
 	display: flex;
-	flex-direction: column-reverse;
+	flex-direction: column;
 
 	.team {
 		flex: 1 1 0;
@@ -86,7 +86,7 @@ html, body, .app, .notifications {
 		&.red {
 			color: red;
 			justify-content: flex-end;
-			flex-direction: column-reverse;
+			flex-direction: column;
 			.bar {
 				background: red;
 			}
@@ -95,7 +95,7 @@ html, body, .app, .notifications {
 		&.blue {
 			color: blue;
 			justify-content: flex-end;
-			flex-direction: column;
+			flex-direction: column-reverse;
 			margin-bottom: 10vh;
 			.bar {
 				background: blue;
