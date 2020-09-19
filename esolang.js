@@ -34,8 +34,9 @@ module.exports = (io) => {
 
 			const previousLanguage = languageMap.get(language.slug);
 			if (previousLanguage.size !== size) {
-				const from = previousLanguage.team === null ? null : (previousLanguage.team === 0 ? 'blue' : 'red');
-				const to = team === null ? null : (team === 0 ? 'blue' : 'red');
+				// Warning!!! team 0 is red, team 1 is blue.
+				const from = previousLanguage.team === null ? null : (previousLanguage.team === 0 ? 'red' : 'blue');
+				const to = team === null ? null : (team === 0 ? 'red' : 'blue');
 				const teamName = contest === 'mayfes2020-day2'
 					? to === 'blue' ? 'TSG' : '外部'
 					: to === 'blue' ? '関東' : '関西';
