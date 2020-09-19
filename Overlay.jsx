@@ -203,7 +203,7 @@ module.exports = class App extends React.Component {
 				this.setState(({notifications}) => ({
 					notifications: notifications.concat({
 						id,
-						color: data.team === 0 ? 'red' : 'blue',
+						color: data.team === 0 ? 'blue' : 'red',
 						text: data.text,
 						user: data.username,
 						isPlayerMessage: true,
