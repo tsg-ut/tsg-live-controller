@@ -231,12 +231,14 @@ module.exports = class App extends React.Component {
 	}
 
 	handleTick = () => {
-		const timer = this.countEnd - Date.now();
-		this.setState({
-			timer: Math.max(0, timer),
-		});
-		if (timer <= 0) {
-			clearInterval(this.interval);
+		if (this.state.timer !== null) {
+			const timer = this.countEnd - Date.now();
+			this.setState({
+				timer: Math.max(0, timer),
+			});
+			if (timer <= 0) {
+				clearInterval(this.interval);
+			}
 		}
 	}
 
