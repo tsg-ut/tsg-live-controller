@@ -139,7 +139,7 @@ module.exports = class App extends React.Component {
 					)
 				})}
 				{this.state.mode === 'ai' && this.state.scores.map((score, index) => (
-					<div key={index} className={`team ${index === 0 ? 'red' : 'blue'}`}>
+					<div key={index} className={`team ${index === 0 ? 'blue' : 'red'}`}>
 						<div className="score">{new Intl.NumberFormat('en-US').format(score)}</div>
 						<div className="bar" style={{
 							width: `${50 + (score < Math.max(...this.state.scores) ? -1 : 1) * Math.log10(Math.abs(this.state.scores[0] - this.state.scores[1]) + 1) / Math.log10(1e13 + 1) * 50}%`,

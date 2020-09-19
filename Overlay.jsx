@@ -158,7 +158,7 @@ module.exports = class App extends React.Component {
 					this.setState(({notifications}) => ({
 						notifications: notifications.concat({
 							id,
-							color: data.team === 0 ? 'red' : 'blue',
+							color: data.team === 0 ? 'blue' : 'red',
 							text: `${team}チームがコードを提出！`,
 							info: `${new Intl.NumberFormat('en-US').format(data.score)}点 ${data.isUpdated ? '(スコア更新)' : ''}`,
 							isTransition: false,
