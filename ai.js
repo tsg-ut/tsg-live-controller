@@ -6,7 +6,7 @@ require('dotenv').config();
 const slack = require('./slack');
 
 const getTeam = (user) => {
-	if (user === '@n4o847' || user === '@azaika') {
+	if (user === '@n4o847' || user === '@azaika_') {
 		return 0;
 	}
 	if (user === '@naan112358' || user === '@hideo54') {
