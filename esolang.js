@@ -50,11 +50,11 @@ module.exports = (io) => {
 				});
 				languageMap.set(language.slug, {name, size, team});
 				if (from === null) {
-					slack('golf', `${teamName}チームが【${data.language}】を獲得!`);
+					slack('golf', `${teamName}チームが【${name}】を獲得!`);
 				} else if (from === to) {
-					slack('golf', `${teamName}チームが【${data.language}】を短縮!!`);
+					slack('golf', `${teamName}チームが【${name}】を短縮!!`);
 				} else {
-					slack('golf', `${teamName}チームが【${data.language}】を奪取!!`);
+					slack('golf', `${teamName}チームが【${name}】を奪取!!`);
 				}
 			}
 		}
