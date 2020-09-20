@@ -152,14 +152,13 @@ module.exports = class App extends React.Component {
 			// }
 
 			if (data.type === 'ai') {
-				// Warning!!!! team 0 is red and 1 is blue.
-				const team = data.team === 0 ? '関西' : '関東';
+				const team = data.team === 0 ? '関東' : '関西';
 
 				await new Promise((resolve) => {
 					this.setState(({notifications}) => ({
 						notifications: notifications.concat({
 							id,
-							color: data.team === 0 ? 'red' : 'blue',
+							color: data.team === 0 ? 'blue' : 'red',
 							text: `${team}チームがコードを提出！`,
 							info: `${new Intl.NumberFormat('en-US').format(data.score)}点 ${data.isUpdated ? '(スコア更新)' : ''}`,
 							isTransition: false,
