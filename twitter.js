@@ -69,8 +69,6 @@ module.exports = async (io) => {
 
 				const text = chars.join('').replace(/\s+/g, ' ').trim().slice(0, 60);
 
-				console.log(text);
-
 				io.emit('message', {
 					text,
 					username: tweet.user.name,
@@ -81,7 +79,7 @@ module.exports = async (io) => {
 				+ ` ${tweet.user.name} `
 				+ `<https://twitter.com/${tweet.user.screen_name}|@${tweet.user.screen_name}>`;
 
-				const tweetUrl = `https://twitter.com/${tweet.user.screen_name}/${tweet.id_str}`;
+				const tweetUrl = `https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`;
 
 				slack('twitter', text, {
 					blocks: [
