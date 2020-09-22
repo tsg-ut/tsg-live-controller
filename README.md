@@ -64,8 +64,8 @@ key: [live-configs.js](/live-configs.js) の object の key.
 
 TSG LIVE! 5 では、次のようにした:
 * コードゴルフ: ブラウザでゴルフのサイトの盤面ページを映す
-* マラソン: このリポジトリ内に [ai.html](/ai.html) がある。[tsg-ai-arena](https://github.com/hakatashi/tsg-ai-arena) の API を叩いている。
-* CTF: このリポジトリ内に [ctf.html](/ctf.html) がある。ctfd の API を叩いている。
+* マラソン: このリポジトリ内に [ai.html](/ai.html) がある。[tsg-ai-arena](https://github.com/hakatashi/tsg-ai-arena) の API を叩いている。割とそのまま使い回せる。
+* CTF: このリポジトリ内に [ctf.html](/ctf.html) がある。ctfd の API を叩いている。問題セットに合わせて SVG の書き換えが必要。
 
 ## リモコン操作
 
